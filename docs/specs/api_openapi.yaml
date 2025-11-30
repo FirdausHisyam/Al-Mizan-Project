@@ -1,0 +1,115 @@
+openapi: 3.0.3
+info:
+  title: Islamic Digital Citadel API
+  description: Secure API for accessing Islamic texts and abrogation data.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local Development Server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Verse:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        surah:
+          type: integer
+        ayah:
+          type: integer
+    
+    Abrogation:
+      type: object
+      properties:
+        id:
+          type: string
+        abrogator:
+          $ref: '#/components/schemas/Verse'
+        abrogated:
+          $ref: '#/components/schemas/Verse'
+        scholar:
+          type: string
+        proof_text:
+          type: string
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User created (JWT returned)
+
+  /auth/signin:
+    post:
+      summary: Login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful (JWT returned)
+
+  /verses:
+    get:
+      summary: List verses
+      parameters:
+        - name: surah
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of verses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Verse'
+
+  /abrogations:
+    get:
+      summary: Get abrogation graph
+      responses:
+        '200':
+          description: Graph data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Abrogation'
