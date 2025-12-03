@@ -33,9 +33,6 @@
 
         <div id="cy" style="flex: 1; background: rgba(0,0,0,0.1);"></div>
         
-        <div id="loading" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 1rem 2rem; border-radius: 2rem; color: white; backdrop-filter: blur(5px);">
-            <span class="htmx-indicator" style="display: inline-block; margin-right: 0.5rem;">✨</span> Expanding Knowledge...
-        </div>
     </div>
 </div>
 
@@ -134,7 +131,7 @@
                                 'target-arrow-color': 'rgba(148, 163, 184, 0.5)',
                                 'target-arrow-shape': 'triangle',
                                 'curve-style': 'bezier',
-                                'label': 'data(label)',
+                                'label': function(ele) { return ele.data('label') + '\n(' + ele.data('authority') + ')'; },
                                 'color': '#ccc',
                                 'font-size': '10px',
                                 'text-rotation': 'autorotate',
@@ -169,43 +166,8 @@
                 updateStats();
 
                 // AI Expansion Event
-                cy.on('dbltap', 'node', function(evt){
-                    const node = evt.target;
-                    const id = node.id();
-                    const label = node.data('label');
-                    const type = node.data('type');
-                    
-                    document.getElementById('loading').style.display = 'block';
-
-                    fetch('/api/v1/ai/expand', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ node_id: id, node_label: label, node_type: type })
-                    })
-                    .then(res => res.json())
-                    .then(newData => {
-                        if (newData.nodes && newData.nodes.length > 0) {
-                            cy.add(newData);
-                            cy.layout({ 
-                                name: 'cose', 
-                                animate: true,
-                                fit: false,
-                                padding: 30,
-                                randomize: false
-                            }).run();
-                            updateStats();
-                        } else {
-                            alert("AI could not find new connections for this node.");
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        alert("Failed to expand graph.");
-                    })
-                    .finally(() => {
-                        document.getElementById('loading').style.display = 'none';
-                    });
-                });
+                // AI Expansion Event REMOVED
+                // cy.on('dbltap', 'node', function(evt){ ... });
             });
     });
 </script>

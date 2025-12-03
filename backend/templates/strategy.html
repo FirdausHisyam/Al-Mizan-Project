@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Strategic Dashboard | Al-Mizan{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto; padding: 2rem;">
+    <div class="card glass" style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Strategic Dashboard</h1>
+        <p style="color: var(--text-muted);">Mapping the Pre-conditions of the Hour.</p>
+        
+        <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+            <a href="/strategy" class="button" style="background: transparent; border: 1px solid var(--glass-border);">All</a>
+            <a href="/strategy?status=Pending" class="button" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.4); color: #F59E0B;">Pending</a>
+            <a href="/strategy?status=Active" class="button" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.4); color: #EF4444;">Active</a>
+            <a href="/strategy?status=Fulfilled" class="button" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.4); color: #10B981;">Fulfilled</a>
+        </div>
+    </div>
+
+    <div style="display: grid; gap: 1.5rem;">
+        {% for event in events %}
+        <div class="card glass" style="border-left: 4px solid {% if event.status == "Pending" %}#F59E0B{% else if event.status == "Active" %}#EF4444{% else %}#10B981{% endif %};">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <h3 style="margin: 0; color: var(--text);">{{ event.title }}</h3>
+                <span style="
+                    font-size: 0.75rem; 
+                    padding: 0.25rem 0.5rem; 
+                    border-radius: 999px; 
+                    background: {% if event.status == "Pending" %}rgba(245, 158, 11, 0.2){% else if event.status == "Active" %}rgba(239, 68, 68, 0.2){% else %}rgba(16, 185, 129, 0.2){% endif %};
+                    color: {% if event.status == "Pending" %}#F59E0B{% else if event.status == "Active" %}#EF4444{% else %}#10B981{% endif %};
+                    font-weight: bold;
+                ">
+                    {{ event.status }}
+                </span>
+            </div>
+            
+            <div style="font-size: 0.875rem; color: var(--secondary); margin-bottom: 0.5rem;">
+                📍 {{ event.location }}
+            </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+                {{ event.description }}
+            </p>
+            
+            <div style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">
+                🔗 {{ event.linked_hadith }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

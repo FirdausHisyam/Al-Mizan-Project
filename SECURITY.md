@@ -2,10 +2,9 @@
 
 ## 1. Strategic Risks (External Reliance)
 
-> [!WARNING]
-> **Risk**: Reliance on non-aligned, external AI providers (Google Gemini).
-> **Impact**: Potential for bias, service denial, or data privacy issues.
-> **Mitigation**: This is a **TEMPORARY** measure. The roadmap includes a transition to self-hosted, fine-tuned open-source models (e.g., Llama, Mixtral) running on independent infrastructure.
+> [!NOTE]
+> **Generative AI has been PURGED** from the truth-definition pipeline.
+> AI is now restricted to read-only search and syntax parsing tasks.
 
 ## 2. Threat Model: Bad Actors
 

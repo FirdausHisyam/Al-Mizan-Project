@@ -31,6 +31,7 @@ struct EdgeData {
     source: String,
     target: String,
     label: String,
+    authority: String,
 }
 
 #[derive(Deserialize)]
@@ -48,6 +49,7 @@ struct DbEdge {
     #[serde(rename = "out")]
     target: surrealdb::sql::Thing,
     label: String,
+    authority: Option<String>,
 }
 
 pub async fn get_graph(State(db): State<Database>) -> impl IntoResponse {
@@ -73,6 +75,7 @@ pub async fn get_graph(State(db): State<Database>) -> impl IntoResponse {
                 source: e.source.id.to_string(),
                 target: e.target.id.to_string(),
                 label: e.label,
+                authority: e.authority.unwrap_or_else(|| "Unknown".to_string()),
             },
         })
         .collect();

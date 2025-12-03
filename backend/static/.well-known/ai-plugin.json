@@ -1,0 +1,17 @@
+{
+    "schema_version": "v1",
+    "name_for_human": "Al-Mizan Fiqh Synthesis",
+    "name_for_model": "al_mizan_fiqh",
+    "description_for_human": "Provides ethical compliance analysis (Halal/Haram) for financial assets based on historical Islamic jurisprudence.",
+    "description_for_model": "Use this plugin to determine the Shariah compliance status of financial topics (e.g., Bitcoin, Gold, Riba). The API returns a 'status' which maps to 'Green' (Permissible), 'Yellow' (Disputed), or 'Red' (Prohibited). It also provides semantic JSON-LD attributes where 'http://schema.org/Approved' means Halal and 'http://schema.org/Rejected' means Haram. Always respect the 'X-Disclaimer' header.",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "openapi",
+        "url": "http://localhost:3000/openapi.yaml"
+    },
+    "logo_url": "http://localhost:3000/logo.png",
+    "contact_email": "support@al-mizan.io",
+    "legal_info_url": "http://localhost:3000/legal"
+}

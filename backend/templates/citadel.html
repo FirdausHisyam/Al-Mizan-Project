@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Citadel Dashboard | Al-Mizan{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+    <div class="card glass" style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="color: var(--primary); margin-bottom: 0.5rem;">Operation Citadel</h1>
+        <p style="color: var(--text-muted);">Local-First. P2P. Uncensorable.</p>
+        <div style="margin-top: 1rem; font-size: 0.875rem; color: var(--secondary);">
+            Node Status: <span style="color: #10B981; font-weight: bold;">ONLINE (Local)</span>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <!-- Export Section -->
+        <div class="card glass">
+            <h3 style="color: var(--text); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Export Snapshot</h3>
+            <p style="font-size: 0.875rem; color: var(--text-muted);">
+                Create a cryptographically signed backup of your local Knowledge Graph. 
+                Use this to share data via USB or IPFS.
+            </p>
+            <button hx-get="/api/v1/citadel/export" hx-swap="none" onclick="alert('Snapshot Exported! (Mock)')" style="width: 100%; margin-top: 1rem;">
+                Download Snapshot
+            </button>
+        </div>
+
+        <!-- Import Section -->
+        <div class="card glass">
+            <h3 style="color: var(--text); border-bottom: 1px solid var(--glass-border); padding-bottom: 0.5rem;">Ingest Snapshot</h3>
+            <p style="font-size: 0.875rem; color: var(--text-muted);">
+                Merge a snapshot from another peer. The "Mizan" algorithm will resolve conflicts based on weight.
+            </p>
+            <button hx-post="/api/v1/citadel/ingest" hx-swap="none" onclick="alert('Snapshot Ingested! (Mock)')" style="width: 100%; margin-top: 1rem; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4);">
+                Ingest from File
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

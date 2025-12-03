@@ -8,6 +8,8 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod api;
 mod domain;
+mod enterprise;
+mod identity;
 mod repository;
 
 use api::auth;
@@ -47,9 +49,59 @@ async fn main() {
         .route("/", get(index_handler))
         .route("/auth/signup", post(auth::signup))
         .route("/auth/signin", post(auth::signin))
-        .route("/api/v1/verify", post(api::v1::verify::verify_text))
+        .route("/api/v1/evidence", post(api::v1::evidence::get_evidence))
+        .route(
+            "/api/v1/synthesis",
+            post(api::v1::synthesis::synthesize_topic),
+        )
+        .route("/api/v1/dashboard", post(api::v1::dashboard::get_dashboard))
         .route("/api/v1/graph", get(api::v1::graph::get_graph))
-        .route("/api/v1/ai/expand", post(api::v1::ai::expand_node))
+        .route(
+            "/api/v1/syntax/translate",
+            post(api::v1::syntax::translate_query),
+        )
+        .route("/citadel", get(api::v1::citadel::dashboard))
+        .route(
+            "/api/v1/citadel/export",
+            get(api::v1::citadel::export_snapshot),
+        )
+        .route(
+            "/api/v1/citadel/ingest",
+            post(api::v1::citadel::ingest_snapshot),
+        )
+        .route(
+            "/api/v1/authority/propose",
+            post(api::v1::authority::propose_ruling),
+        )
+        .route(
+            "/api/v1/authority/sign",
+            post(api::v1::authority::sign_ruling),
+        )
+        .route(
+            "/api/v1/enterprise/metrics",
+            get(api::v1::enterprise::get_metrics),
+        )
+        .route(
+            "/api/v1/enterprise/audit",
+            post(api::v1::enterprise::audit_document),
+        )
+        .route(
+            "/api/v1/enterprise/analyze_contract",
+            post(api::v1::enterprise::analyze_contract_handler),
+        )
+        .route(
+            "/api/v1/enterprise/certify",
+            post(api::v1::enterprise::certify_contract_handler),
+        )
+        .route(
+            "/api/v1/identity/resolve/:did",
+            get(api::v1::identity::resolve_did),
+        )
+        .route(
+            "/api/v1/identity/verify",
+            post(api::v1::identity::verify_vc),
+        )
+        .route("/strategy", get(api::v1::event::get_events))
         .route("/graph", get(graph_handler))
         .route(
             "/favicon.ico",

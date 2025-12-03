@@ -1,3 +1,10 @@
-pub mod ai;
+pub mod authority;
+pub mod citadel;
+pub mod dashboard;
+pub mod enterprise;
+pub mod event;
+pub mod evidence;
 pub mod graph;
-pub mod verify;
+pub mod identity;
+pub mod syntax;
+pub mod synthesis;

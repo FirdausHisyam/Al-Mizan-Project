@@ -18,10 +18,15 @@ We use the **C4 Model** (Context, Containers, Components, Code) for visualizatio
 
 ```mermaid
 graph TD
-    User[User (Browser)] -->|HTTPS| WebApp[Backend (Rust/Axum)]
-    WebApp -->|HTML/HTMX| User
-    WebApp -->|SurrealQL| DB[(SurrealDB)]
-    WebApp -->|JSON| AI[Gemini AI]
+    subgraph "Bank's Infrastructure (On-Prem)"
+        User[User (Browser)] -->|HTTPS| Node[Al-Mizan Node (Docker)]
+        Node -->|Local Query| LocalDB[(Local SurrealDB)]
+    end
+
+    subgraph "Al-Mizan Cloud (The Citadel)"
+        Waqf[Waqf Network (P2P)] -->|Sync (Data)| Node
+        Corp[License Server] -->|Verify Key (Logic)| Node
+    end
 ```
 
 ## 4. Technology Decisions
@@ -32,7 +37,7 @@ graph TD
 | **Database** | **SurrealDB** | Graph capabilities, flexibility, modern. |
 | **Frontend** | **HTMX + Askama** | Simplicity, "No-Build", server-side rendering. |
 | **Styling** | **Vanilla CSS** | Full control, Glassmorphism, no build steps. |
-| **AI** | **Google Gemini** | **Temporary Placeholder**. Rapid prototyping only. To be replaced by self-hosted models. |
+| **AI** | **None (Generative)** | **PURGED**. AI is restricted to search/syntax parsing only. No truth generation. |
 
 ## 5. Security Perspective
 

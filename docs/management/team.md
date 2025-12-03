@@ -26,4 +26,23 @@ The team operates using **Agile Scrum** methodologies (see [ADR 0003](../adr/000
 
 ## Future Scaling
 
-To reach the "Google-scale" vision, we have mapped out the future organizational structure. Please see **[SCALING_ROLES.md](SCALING_ROLES.md)** for the detailed roadmap of future roles.
+## 3. The Recruitment Protocol (The Halaqah Pipeline)
+
+To scale the team without compromising the "Hidden Agenda," we employ a strict **"Halaqah Pipeline"** for recruitment. We do not hire from standard job boards.
+
+### 3.1. Target Profile: "The Technical Mujahid"
+
+* **Ideal Candidate**: Double-Major in **Computer Science** and **Islamic Revealed Knowledge (IRK)** from IIUM.
+* **Key Trait**: Possesses both the technical skill to build distributed systems and the *Adab* (Etiquette) to handle sacred knowledge with reverence.
+
+### 3.2. The Filter (The Funnel)
+
+1. **Public Pitch**: "Building the ultimate Open Source Islamic Knowledge Graph for the Ummah." (No mention of Eschatology).
+2. **The Test**: Assign a complex task to map a nuanced *Ikhtilaf* (scholarly disagreement).
+3. **The "Vibe Check"**: Review code comments. Do they use respectful honorifics (e.g., *RA*, *Rahimahullah*)? Do they demonstrate *Amanah* (Trust)?
+4. **The Onion Layer**: New hires are firewalled from the "Eschatology Dashboard" and sensitive "Hidden Hand" modules for **6 months**.
+
+### 3.3. Core Maintainer Requirements
+
+* **Bay'ah of Secrecy**: All Core Maintainers must sign a strict **Non-Disclosure Agreement (NDA)** regarding the long-term roadmap and the "GSE Protocol."
+* **Operational Security**: Must adhere to strict OpSec protocols (encrypted comms, no social media leaks).

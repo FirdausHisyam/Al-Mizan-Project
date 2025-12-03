@@ -45,32 +45,48 @@ graph TD
 
 ### 2. AI Integration (Intelligence Layer)
 
-* **Provider**: Google Gemini Pro (via `reqwest`).
-* **Status**: **TRANSITIONAL / TEMPORARY**.
-* **Role**: Generates semantic connections between nodes (Verses, Scholars, Hadiths) to expand the graph dynamically.
-* **Safety**: Enforces Tawhidic context in prompts.
-* **Strategic Roadmap**:
-  * **Phase 1 (Current)**: Use external API for rapid prototyping and validation.
-  * **Phase 2**: Fine-tune open-source models (e.g., Llama 3, Mixtral) on Islamic datasets.
-  * **Phase 3**: Self-host aligned models on independent infrastructure to eliminate external reliance.
+* **Role**: **Search & Syntax Helper ONLY**.
+* **Restriction**: **NO GENERATIVE AI** for defining truth-relationships.
 
-### 2. Backend (Application & Domain Layer)
+### 3. The "Cyborg" Ingestion Pipeline (AI-Human Hybrid)
 
-* **Tech**: Rust, Axum.
+To solve the "Ingestion Bottleneck" (6,000+ verses, 500k+ Hadith), we employ a strict **Human-in-the-Loop** pipeline:
 
-* **Role**: Orchestrates business logic, validates rules, and manages data flow.
-* **Structure**:
-  * `api/`: HTTP handlers and routing.
-  * `domain/`: Core business entities and logic (pure Rust, no dependencies).
-  * `service/`: Application use cases.
-  * `repository/`: Data access interfaces.
+1. **OCR Scraper (AI)**:
+    * **Input**: PDF/Scanned Classical Texts (e.g., *Al-Majmu'*).
+    * **Action**: AI extracts entities and relationships (Scholar -> Opinion -> Topic).
+    * **Output**: `UNVERIFIED_DRAFT` nodes.
 
-### 3. Database (Infrastructure Layer)
+2. **Micro-Waqf (Gamification)**:
+    * **Input**: `UNVERIFIED_DRAFT` nodes.
+    * **Action**: Students/Researchers verify AI output against the source image via the "Verification Console".
+    * **Incentive**: Earn "Hasana Tokens" (Reputation) for correct verifications.
+    * **Output**: `PEER_REVIEWED` nodes.
 
-* **Tech**: SurrealDB.
+3. **Mizan Stamp (Cryptographic Commit)**:
+    * **Input**: `PEER_REVIEWED` nodes.
+    * **Action**: Senior Scholars sign the node with their DID Private Key.
+    * **Output**: `IMMUTABLE_TRUTH` (Canon).
 
-* **Role**: Persists data and handles complex graph queries.
-* **Why SurrealDB?**: It natively supports graph relationships, which is essential for mapping the intricate connections between Quranic verses and Hadith.
+### 1. The Citadel Node (Backend)
+
+* **Runtime**: Rust (Axum).
+
+* **Database**: SurrealDB (Embedded/Local).
+* **Role**: Manages the local graph, handles queries, and generates/ingests snapshots.
+
+### 2. The Interface (Frontend)
+
+* **Tech**: HTML/HTMX (Server-Side Rendered).
+
+* **Philosophy**: "No-Build" - simple, lightweight, and modifiable.
+
+### 3. The Protocol (Sync)
+
+* **Format**: Signed JSON Snapshots.
+
+* **Transport**: USB, LAN, IPFS.
+* **Logic**: Additive Union with "Mizan" Weighting.
 
 ## Data Flow
 

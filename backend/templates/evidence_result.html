@@ -1,0 +1,35 @@
+<div class="card glass" style="animation: fadeIn 0.5s ease-out;">
+    <h3 style="margin-top: 0; color: var(--primary);">Theological Topography</h3>
+    
+    {% if let Some(lens) = lens_applied %}
+    <div style="margin-bottom: 1rem; font-size: 0.875rem; color: var(--text-muted);">
+        Lens Applied: <span style="color: var(--secondary); font-weight: bold;">{{ lens }}</span>
+    </div>
+    {% endif %}
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        {% for opinion in opinions %}
+        <div style="
+            padding: 1rem; 
+            border-radius: 0.5rem; 
+            border: 1px solid rgba(255,255,255,0.1);
+            background: {% if opinion.school == "Shafi'i" %}rgba(16, 185, 129, 0.1){% else if opinion.school == "Hanafi" %}rgba(59, 130, 246, 0.1){% else if opinion.school == "Maliki" %}rgba(245, 158, 11, 0.1){% else %}rgba(107, 114, 128, 0.1){% endif %};
+        ">
+            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; color: var(--text-muted);">
+                {{ opinion.school }} (Rank {{ opinion.rank }})
+            </div>
+            <h4 style="margin: 0 0 0.5rem 0; color: var(--text);">{{ opinion.scholar }}</h4>
+            <div style="font-weight: bold; color: {% if opinion.verdict == "Abrogated" %}#EF4444{% else %}#10B981{% endif %};">
+                {{ opinion.verdict }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>

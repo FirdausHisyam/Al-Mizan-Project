@@ -78,14 +78,19 @@ For more details, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## 🗺 Roadmap
 
-- [ ] **Phase 1: Foundation** - Core graph structure and basic visualization.
-- [ ] **Phase 2: Data Ingestion** - Import pipelines for Quran and Hadith corpus.
-- [ ] **Phase 3: Analysis Tools** - Algorithms for detecting abrogation patterns.
-- [ ] **Phase 4: Public API** - REST/GraphQL API for third-party integrations.
+For the detailed strategic roadmap, including the **"Cyborg" Isnad Pipeline**, please see [ROADMAP.md](ROADMAP.md).
 
 ## 🤝 Contributing
 
 We welcome contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests.
+
+## ⚖️ Governance: Algorithmic Shura
+
+To mitigate the risk of a "Digital Dictator" or single point of failure, Al-Mizan employs an **Algorithmic Shura** consensus mechanism.
+
+- **Consensus Threshold**: A ruling (Fatwa) only achieves "Canon" status (Weight 1.0) when it is cryptographically signed by **40 Verified Scholars**.
+- **Decentralized Verification**: Truth is not determined by a central admin, but by the distributed consensus of the scholarly community.
+- **Immutable Audit Trail**: Every signature is recorded on the graph, creating a transparent and tamper-proof history of consensus.
 
 ## 🛡 Security
 

@@ -8,29 +8,72 @@
         <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
             Verify the authenticity of Islamic texts against the Tawhidic Knowledge Graph.
         </p>
+        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+            <a href="/graph" class="button" style="text-decoration: none; display: inline-block;">Explore Graph</a>
+            <a href="/citadel" class="button" style="text-decoration: none; display: inline-block; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4);">Citadel Ops</a>
+        </div>
     </div>
     
     <div class="card glass" style="max-width: 700px; margin: 0 auto;">
-        <form hx-post="/api/v1/verify" hx-target="#result" hx-swap="innerHTML" hx-indicator="#spinner">
-            <label for="text" style="display: block; margin-bottom: 0.75rem; font-weight: 500; color: var(--primary);">Text to Verify</label>
-            <textarea 
-                id="text" 
-                name="_text" 
-                rows="6" 
-                placeholder="Paste a Hadith or Quranic verse here to check its authenticity..."
-                required
-            ></textarea>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--primary);">Ask the Digital Mufti</h2>
+        <form hx-post="/api/v1/synthesis" hx-target="#result" hx-swap="innerHTML" hx-indicator="#spinner">
+            <div style="display: flex; gap: 1rem;">
+                <input 
+                    type="text" 
+                    name="topic" 
+                    placeholder="e.g., Is Bitcoin Halal?" 
+                    style="flex: 1; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.05); color: var(--text-main);"
+                    required
+                >
                 <button type="submit" class="btn btn-primary">
-                    Verify Authenticity
+                    Synthesize
                 </button>
-                <span id="spinner" class="htmx-indicator">
-                    Analyzing Isnad & Matan...
-                </span>
+            </div>
+            <div id="spinner" class="htmx-indicator" style="text-align: center; margin-top: 1rem; color: var(--text-muted);">
+                Consulting the Scholars...
             </div>
         </form>
     </div>
 
     <div id="result" style="margin-top: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;"></div>
+
+    <script>
+        document.body.addEventListener('htmx:afterSwap', function(evt) {
+            if (evt.detail.target.id === 'result') {
+                const data = JSON.parse(evt.detail.xhr.responseText);
+                const colorMap = {
+                    "Red": "#EF4444",
+                    "Yellow": "#EAB308",
+                    "Green": "#22C55E"
+                };
+                const color = colorMap[data.status] || "#94A3B8";
+                
+                evt.detail.target.innerHTML = `
+                    <div class="card glass" style="text-align: center; border-top: 4px solid ${color};">
+                        <div style="font-size: 4rem; margin-bottom: 1rem; color: ${color};">
+                            ${data.status === 'Red' ? '🛑' : data.status === 'Yellow' ? '⚠️' : '✅'}
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                            <img src="${data.scholar_avatar}" alt="Scholar Avatar" style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid ${color}; margin-right: 1rem;">
+                            <div style="text-align: left;">
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">Authority</div>
+                                <div style="font-size: 1.1rem; font-weight: bold; color: var(--text-main);">${data.primary_scholar}</div>
+                            </div>
+                        </div>
+                        <h3 style="font-size: 2rem; margin-bottom: 0.5rem; color: ${color};">Dominant View: ${data.status}</h3>
+                        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Source: Shafi'i School (Consensus)</div>
+                        <p style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem;">
+                            ${data.summary}
+                        </p>
+                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                            <strong>Consensus Score:</strong> ${(data.consensus_score * 100).toFixed(0)}%
+                        </div>
+                        <button class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-main);">
+                            View Detailed Citations
+                        </button>
+                    </div>
+                `;
+            }
+        });
+    </script>
 {% endblock %}
