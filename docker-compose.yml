@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  database:
+    image: surrealdb/surrealdb:latest
+    ports:
+      - "8000:8000"
+    command: start --log debug --user root --pass root memory
+    volumes:
+      - surreal_data:/mydata
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_URL=ws://database:8000
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NS=idc
+      - DB_DB=main
+    depends_on:
+      - database
+
+volumes:
+  surreal_data:

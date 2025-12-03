@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Certainty Engine | Al-Mizan{% endblock %}
+
+{% block content %}
+    <div style="text-align: center; margin-bottom: 4rem;">
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #94A3B8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Certainty Engine</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+            Verify the authenticity of Islamic texts against the Tawhidic Knowledge Graph.
+        </p>
+    </div>
+    
+    <div class="card glass" style="max-width: 700px; margin: 0 auto;">
+        <form hx-post="/api/v1/verify" hx-target="#result" hx-swap="innerHTML" hx-indicator="#spinner">
+            <label for="text" style="display: block; margin-bottom: 0.75rem; font-weight: 500; color: var(--primary);">Text to Verify</label>
+            <textarea 
+                id="text" 
+                name="_text" 
+                rows="6" 
+                placeholder="Paste a Hadith or Quranic verse here to check its authenticity..."
+                required
+            ></textarea>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="submit" class="btn btn-primary">
+                    Verify Authenticity
+                </button>
+                <span id="spinner" class="htmx-indicator">
+                    Analyzing Isnad & Matan...
+                </span>
+            </div>
+        </form>
+    </div>
+
+    <div id="result" style="margin-top: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;"></div>
+{% endblock %}

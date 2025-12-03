@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Knowledge Graph | Al-Mizan{% endblock %}
+
+{% block content %}
+<div style="height: calc(100vh - 140px); position: relative; margin-top: -2rem;">
+    <div class="card glass" style="height: 100%; padding: 0; overflow: hidden; display: flex; flex-direction: column; border-radius: 1rem;">
+        <!-- Toolbar -->
+        <div style="padding: 1rem; border-bottom: 1px solid var(--glass-border); display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2);">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <h2 style="margin: 0; font-size: 1.25rem; color: var(--primary);">Tawhidic Knowledge Graph</h2>
+                <input type="text" id="search" placeholder="Search nodes..." style="margin: 0; padding: 0.5rem; width: 200px; font-size: 0.875rem;">
+            </div>
+            
+            <div style="display: flex; gap: 1rem; align-items: center; font-size: 0.875rem; color: var(--text-muted);">
+                <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer;">
+                    <input type="checkbox" checked onchange="filterGraph()" value="verse"> 
+                    <span style="color: #10B981;">●</span> Verse
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer;">
+                    <input type="checkbox" checked onchange="filterGraph()" value="scholar"> 
+                    <span style="color: #F59E0B;">●</span> Scholar
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.25rem; cursor: pointer;">
+                    <input type="checkbox" checked onchange="filterGraph()" value="hadith"> 
+                    <span style="color: #3B82F6;">●</span> Hadith
+                </label>
+                <div style="border-left: 1px solid var(--glass-border); padding-left: 1rem;">
+                    <span id="stats">Loading...</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="cy" style="flex: 1; background: rgba(0,0,0,0.1);"></div>
+        
+        <div id="loading" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); padding: 1rem 2rem; border-radius: 2rem; color: white; backdrop-filter: blur(5px);">
+            <span class="htmx-indicator" style="display: inline-block; margin-right: 0.5rem;">✨</span> Expanding Knowledge...
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<script>
+    let cy;
+    
+    function updateStats() {
+        if (!cy) return;
+        const nodes = cy.nodes(':visible').length;
+        const edges = cy.edges(':visible').length;
+        document.getElementById('stats').innerText = `${nodes} Nodes, ${edges} Edges`;
+    }
+
+    function filterGraph() {
+        if (!cy) return;
+        
+        const types = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+        const query = document.getElementById('search').value.toLowerCase();
+        
+        cy.batch(() => {
+            cy.nodes().forEach(node => {
+                const typeMatch = types.includes(node.data('type'));
+                const labelMatch = node.data('label').toLowerCase().includes(query);
+                
+                if (typeMatch && labelMatch) {
+                    node.style('display', 'element');
+                } else {
+                    node.style('display', 'none');
+                }
+            });
+        });
+        updateStats();
+    }
+
+    document.getElementById('search').addEventListener('input', filterGraph);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/v1/graph')
+            .then(res => res.json())
+            .then(data => {
+                cy = cytoscape({
+                    container: document.getElementById('cy'),
+                    elements: data,
+                    style: [
+                        {
+                            selector: 'node',
+                            style: {
+                                'background-color': '#666',
+                                'label': 'data(label)',
+                                'color': '#fff',
+                                'text-valign': 'center',
+                                'text-halign': 'center',
+                                'text-outline-width': 2,
+                                'text-outline-color': '#000',
+                                'width': 60,
+                                'height': 60,
+                                'font-size': '12px',
+                                'text-wrap': 'wrap',
+                                'text-max-width': '80px'
+                            }
+                        },
+                        {
+                            selector: 'node[type="divine"]',
+                            style: { 
+                                'background-color': '#FFD700', 
+                                'text-outline-color': '#B45309',
+                                'width': 90,
+                                'height': 90,
+                                'font-size': '16px',
+                                'font-weight': 'bold',
+                                'border-width': 4,
+                                'border-color': '#FFF',
+                                'shadow-blur': 20,
+                                'shadow-color': '#FFD700',
+                                'shadow-opacity': 0.5
+                            }
+                        },
+                        {
+                            selector: 'node[type="verse"]',
+                            style: { 'background-color': '#10B981', 'text-outline-color': '#064E3B' }
+                        },
+                        {
+                            selector: 'node[type="scholar"]',
+                            style: { 'background-color': '#F59E0B', 'text-outline-color': '#78350F' }
+                        },
+                        {
+                            selector: 'node[type="hadith"]',
+                            style: { 'background-color': '#3B82F6', 'text-outline-color': '#1E3A8A' }
+                        },
+                        {
+                            selector: 'edge',
+                            style: {
+                                'width': 3,
+                                'line-color': 'rgba(148, 163, 184, 0.5)',
+                                'target-arrow-color': 'rgba(148, 163, 184, 0.5)',
+                                'target-arrow-shape': 'triangle',
+                                'curve-style': 'bezier',
+                                'label': 'data(label)',
+                                'color': '#ccc',
+                                'font-size': '10px',
+                                'text-rotation': 'autorotate',
+                                'text-background-color': '#000',
+                                'text-background-opacity': 0.5,
+                                'text-background-padding': '2px'
+                            }
+                        },
+                        {
+                            selector: ':hidden',
+                            style: { 'display': 'none' }
+                        }
+                    ],
+                    layout: {
+                        name: 'cose',
+                        animate: true,
+                        randomize: true,
+                        componentSpacing: 100,
+                        nodeRepulsion: 400000,
+                        nodeOverlap: 10,
+                        idealEdgeLength: 100,
+                        edgeElasticity: 100,
+                        nestingFactor: 5,
+                        gravity: 80,
+                        numIter: 1000,
+                        initialTemp: 200,
+                        coolingFactor: 0.95,
+                        minTemp: 1.0
+                    }
+                });
+
+                updateStats();
+
+                // AI Expansion Event
+                cy.on('dbltap', 'node', function(evt){
+                    const node = evt.target;
+                    const id = node.id();
+                    const label = node.data('label');
+                    const type = node.data('type');
+                    
+                    document.getElementById('loading').style.display = 'block';
+
+                    fetch('/api/v1/ai/expand', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ node_id: id, node_label: label, node_type: type })
+                    })
+                    .then(res => res.json())
+                    .then(newData => {
+                        if (newData.nodes && newData.nodes.length > 0) {
+                            cy.add(newData);
+                            cy.layout({ 
+                                name: 'cose', 
+                                animate: true,
+                                fit: false,
+                                padding: 30,
+                                randomize: false
+                            }).run();
+                            updateStats();
+                        } else {
+                            alert("AI could not find new connections for this node.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Failed to expand graph.");
+                    })
+                    .finally(() => {
+                        document.getElementById('loading').style.display = 'none';
+                    });
+                });
+            });
+    });
+</script>
+{% endblock %}

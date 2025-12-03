@@ -1,0 +1,14 @@
+# This file defines who owns which files in the repo.
+
+# Global owners
+*       @FirdausHisyam
+
+# Backend
+/backend/   @FirdausHisyam
+
+# Frontend
+/frontend/  @FirdausHisyam
+
+# Documentation
+/docs/      @FirdausHisyam
+*.md        @FirdausHisyam
