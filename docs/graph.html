@@ -72,15 +72,19 @@
 
     <nav class="glass-panel z-50 px-6 py-3 flex justify-between items-center border-b border-mizan-gold/20">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-mizan-green rounded-lg flex items-center justify-center text-mizan-gold">
-                <i class="fas fa-balance-scale"></i>
-            </div>
-            <div>
-                <h1 class="font-cinzel font-bold text-lg text-slate-900 leading-none">Al-Mizan <span class="text-mizan-gold">Architect</span></h1>
-                <p class="font-amiri text-xs text-slate-500">الرسم البياني التوحيدي للمعرفة</p>
-            </div>
+            <a href="index.html" class="flex items-center gap-2 text-slate-800 hover:text-mizan-gold transition">
+                <i class="fas fa-home"></i> <span class="font-cinzel font-bold">Al-Mizan</span>
+            </a>
+            <span class="text-slate-300">|</span>
+            <span class="font-bold text-slate-600 text-mizan-gold">Architect</span>
         </div>
         
+        <div class="flex gap-4 text-sm font-medium mr-auto ml-8">
+            <a href="engine.html" class="text-slate-600 hover:text-blue-600 transition">Certainty Engine</a>
+            <a href="strategy.html" class="text-slate-600 hover:text-amber-600 transition">Strategy</a>
+            <a href="citadel.html" class="text-slate-600 hover:text-emerald-600 transition">Citadel Ops</a>
+        </div>
+
         <div class="flex gap-2">
             <button onclick="setMode('organic')" class="px-3 py-1.5 text-xs font-bold rounded-md bg-white border border-slate-200 hover:bg-slate-50 transition shadow-sm">
                 <i class="fas fa-project-diagram mr-1"></i> Organic
@@ -304,6 +308,7 @@
                         face: 'Inter',
                         strokeWidth: 3,
                         multi: 'html',
+                        // multi font logic is specific to Vis.js if enabled, but we use simple styling here
                     },
                     scaling: {
                         min: 10,
@@ -356,9 +361,6 @@
 
             // Events
             network.on("click", handleSelect);
-            network.on("click", handleSelect);
-            // Removed custom cursor manipulation to let Vis.js handle it naturally
-
             
             network.on("stabilizationIterationsDone", () => {
                 const loader = document.getElementById('initial-loader');

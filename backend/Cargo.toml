@@ -2,6 +2,7 @@
 name = "al-mizan-backend"
 version = "0.1.0"
 edition = "2021"
+default-run = "al-mizan-backend"
 
 [dependencies]
 axum = "0.7"

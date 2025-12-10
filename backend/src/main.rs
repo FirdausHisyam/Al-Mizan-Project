@@ -103,6 +103,7 @@ async fn main() {
         )
         .route("/strategy", get(api::v1::event::get_events))
         .route("/graph", get(graph_handler))
+        .route("/presentation", get(presentation_handler))
         .route(
             "/favicon.ico",
             get(|| async { axum::http::StatusCode::NO_CONTENT }),
@@ -126,5 +127,14 @@ struct GraphTemplate;
 
 async fn graph_handler() -> impl axum::response::IntoResponse {
     let template = GraphTemplate;
+    Html(template.render().unwrap())
+}
+
+#[derive(Template)]
+#[template(path = "presentation.html")]
+struct PresentationTemplate;
+
+async fn presentation_handler() -> impl axum::response::IntoResponse {
+    let template = PresentationTemplate {};
     Html(template.render().unwrap())
 }

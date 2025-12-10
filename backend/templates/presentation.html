@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Project Al-Mizan: Epistemic Security</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/serif.min.css" id="theme">
+        
+        <!-- Google Fonts: Cinzel (Heading) and Merriweather (Body) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+
+		<style>
+            /* Custom "Civilizational" Styling */
+            :root {
+                --r-main-font: 'Merriweather', serif; /* Academic/Classic feel */
+                --r-heading-font: 'Cinzel', serif; /* Islamic/Monumental feel */
+                --r-background-color: #fdfbf7; /* Parchment/Paper color */
+                --r-main-color: #2c3e50;
+            }
+            .reveal h1, .reveal h2 { text-transform: none; }
+            .reveal .slide-number { color: #8e44ad; }
+            
+            /* The Graph Container within the slide */
+            #cy-slide {
+                width: 100%;
+                height: 500px;
+                border: 2px solid #ddd;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                background: white;
+            }
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+					<h1>Project Al-Mizan</h1>
+					<h3>Architecting the "Unity of Knowledge"</h3>
+					<p><small>From Epistemological Fragmentation to Digital Ontology</small></p>
+                    <div style="margin-top: 2rem; font-size: 0.6em; opacity: 0.7;">
+                        Final Year Project Proposal
+                    </div>
+				</section>
+
+				<section>
+					<h2>The Challenge: Context Collapse</h2>
+                    <div style="text-align: left;">
+                        <p class="fragment"><strong>1. The "Google Sheikh":</strong> Access to text has increased, but access to <em>methodology</em> (Usul) has collapsed.</p>
+                        <p class="fragment"><strong>2. Information Anarchy:</strong> A random tweet has the same visual weight as a Fatwa. The <em>Isnad</em> (Chain of Authority) is broken.</p>
+                        <p class="fragment"><strong>3. The Result:</strong> Chaos (Fitna). Without context, knowledge becomes a weapon.</p>
+                    </div>
+				</section>
+
+				<section>
+					<h2>The Solution: Digital Isnad</h2>
+					<p>"Knowledge is Organic." — <em>Dr. Ahmad El-Muhammady</em></p>
+                    <p class="fragment">A static database is a grave. A Knowledge Graph is a living ecosystem.</p>
+                    <p class="fragment">We map the <strong>Genealogy of Ideas</strong>.</p>
+				</section>
+
+                <section data-state="load-graph">
+					<h3>Live Epistemology</h3>
+                    <div id="cy-slide"></div>
+                    <p><small>Interactive Mapping of Verse 2:106 (Abrogation)</small></p>
+				</section>
+
+				<section>
+					<h2>Epistemic Independence</h2>
+                    <ul>
+                        <li><strong>Waqf Core:</strong> The data remains free and open.</li>
+                        <li><strong>Commercial Shield:</strong> Selling "Verification Layers" to Fintech.</li>
+                        <li><strong>Goal:</strong> An infrastructure that survives political shifts.</li>
+                    </ul>
+				</section>
+
+				<section>
+					<h2>The Request</h2>
+                    <p>We have the <strong>Syntax</strong> (Code). We need the <strong>Semantics</strong> (Hikmah).</p>
+                    <hr>
+                    <blockquote style="font-style: italic; background: #eee; padding: 1rem;">
+                        "How do we govern the 'Truth' in this graph to prevent sectarian exclusion?"
+                    </blockquote>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+		<script>
+			Reveal.initialize({
+                hash: true,
+                transition: 'convex',
+            });
+
+            // Initialize Graph ONLY when Slide 4 is shown (to save resources)
+            Reveal.on( 'load-graph', () => {
+                if(!window.graphLoaded) {
+                    var cy = cytoscape({
+                        container: document.getElementById('cy-slide'),
+                        elements: [
+                            { data: { id: 'v', label: 'Verse 2:106' } },
+                            { data: { id: 's1', label: 'Imam Shafi\'i' } },
+                            { data: { id: 's2', label: 'Ibn Kathir' } },
+                            { data: { id: 'o1', label: 'Abrogates 2:109' } },
+                            { data: { source: 's1', target: 'o1', label: 'deduced' } },
+                            { data: { source: 'o1', target: 'v', label: 'applies_to' } },
+                            { data: { source: 's2', target: 'v', label: 'commented' } }
+                        ],
+                        style: [
+                            { selector: 'node', style: { 'background-color': '#2c3e50', 'label': 'data(label)', 'color': '#fff', 'text-valign': 'center' } },
+                            { selector: 'edge', style: { 'width': 3, 'line-color': '#ccc', 'target-arrow-color': '#ccc', 'target-arrow-shape': 'triangle' } }
+                        ],
+                        layout: { name: 'circle' }
+                    });
+                    window.graphLoaded = true;
+                }
+            } );
+		</script>
+	</body>
+</html>
