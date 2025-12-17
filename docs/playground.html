@@ -199,19 +199,75 @@
     </div>
 
     <script>
-        // --- Data ---
+        // --- Data (Ar-Rahnu Example) ---
         const initialNodes = [
-            { id: 0, label: 'Allah', group: 'divine', title: 'The Ultimate Source' },
-            { id: 1, label: 'Quran', group: 'wahi', title: 'Revelation' },
-            { id: 3, label: 'Usul al-Fiqh', group: 'usul', title: 'Methodology' },
-            { id: 8, label: 'Riba', group: 'fiqh', title: 'Usury / Interest' },
-            { id: 10, label: 'Crypto', group: 'modern', title: 'Digital Assets' },
-            { id: 13, label: 'Ayat 2:275', group: 'wahi', title: 'Prohibition Verse' },
+            // Roots
+            { id: 0, label: 'Allah', group: 'divine', title: 'The Ultimate Legislator', arabic: 'الله' },
+            { id: 1, label: 'Quran 2:283', group: 'wahi', title: 'Verse of Collateral (Rahn)', arabic: 'آية الرهن' },
+            { id: 2, label: 'Sunnah', group: 'wahi', title: 'Prophet ﷺ pawned armor for food', arabic: 'سنة' },
+
+            // Usul (Methodology)
+            { id: 3, label: 'Maslahah', group: 'usul', title: 'Public Interest (Access to Credit)', arabic: 'المصلحة المرسلة' },
+            { id: 4, label: 'Qiyas', group: 'usul', title: 'Analogy', arabic: 'القياس' },
+
+            // Fiqh (Concepts)
+            { id: 10, label: 'Rahn', group: 'fiqh', title: 'The Pledged Asset', arabic: 'الرهن' },
+            { id: 11, label: 'Qard Hasan', group: 'fiqh', title: 'Benevolent Loan (Principal Only)', arabic: 'القرض الحسن' },
+            { id: 12, label: 'Wadiah', group: 'fiqh', title: 'Safekeeping (Trust)', arabic: 'الوديعة' },
+            { id: 13, label: 'Ujrah', group: 'fiqh', title: 'Fee for Safekeeping Service', arabic: 'الأجرة' },
+            { id: 14, label: 'Riba', group: 'fiqh', title: 'Prohibited Interest/Usury', arabic: 'الربا' },
+
+            // Modern Application
+            { id: 20, label: 'Ar-Rahnu', group: 'modern', title: 'Islamic Pawnbroking Product', arabic: 'الرهن الإسلامي' },
+            { id: 21, label: 'Gold Asset', group: 'modern', title: 'Collateral Object', arabic: 'ذهب' },
+            { id: 22, label: 'Cash Loan', group: 'modern', title: 'Liquidity Provided', arabic: 'نقد' },
+
+            // --- SUKUK EXTENSION (Making it Impressive) ---
+            { id: 30, label: 'Sukuk', group: 'modern', title: 'Islamic Investment Certificates', arabic: 'صكوك' },
+            { id: 31, label: 'SPV', group: 'modern', title: 'Special Purpose Vehicle', arabic: 'شركة ذات غرض خاص' },
+            { id: 32, label: 'Ijarah', group: 'fiqh', title: 'Leasing Contract', arabic: 'الإجارة' },
+            { id: 33, label: 'Mudarabah', group: 'fiqh', title: 'Profit-Sharing Partnership', arabic: 'المضاربة' },
+            { id: 34, label: 'Ayat 2:275', group: 'wahi', title: 'Halal Trade', arabic: 'وأحل الله البيع' },
+            { id: 35, label: 'Real Asset', group: 'modern', title: 'Tangible Underlying Asset', arabic: 'أعيان' },
+            { id: 36, label: 'Urf', group: 'usul', title: 'Customary Practice', arabic: 'العرف' },
         ];
 
         const initialEdges = [
-            { from: 0, to: 1 }, { from: 1, to: 3 }, { from: 1, to: 13 },
-            { from: 13, to: 8 }, { from: 3, to: 8 }, 
+            // Wahi Grounds
+            { from: 0, to: 1 }, { from: 0, to: 2 }, { from: 0, to: 34 },
+            
+            // Evidence for Concepts
+            { from: 1, to: 10, label: 'source_of' }, // Quran -> Rahn
+            { from: 2, to: 10, label: 'validates' }, // Sunnah -> Rahn
+            { from: 0, to: 14, label: 'prohibits' }, // Divine -> Riba
+            { from: 34, to: 32, label: 'permits' },  // Verse -> Ijarah (Trade)
+
+            // Fiqh components of Ar-Rahnu
+            { from: 10, to: 20, label: 'foundation' },
+            { from: 11, to: 20, label: 'contract_1' }, // The Loan part
+            { from: 12, to: 20, label: 'contract_2' }, // The Safekeeping part
+            { from: 13, to: 20, label: 'revenue' },    // The Fee part
+            
+            // Logic vs Riba
+            { from: 14, to: 11, label: 'prohibits_excess_on' }, // No interest on Qard
+            { from: 14, to: 20, label: 'avoided_by' },
+
+            // Usul Justification
+            { from: 3, to: 20, label: 'justifies_need' }, // Maslahah justifies the institution
+            { from: 3, to: 30, label: 'justifies_structure' }, // Maslahah -> Sukuk
+
+            // Modern Flow (Ar-Rahnu)
+            { from: 20, to: 22, label: 'provides' }, // Arrahnu gives Cash
+            { from: 21, to: 20, label: 'secured_by' }, // Gold secures Arrahnu
+
+            // SUKUK CONNECTIONS
+            { from: 30, to: 31, label: 'issued_by' },
+            { from: 35, to: 31, label: 'held_by' },
+            { from: 32, to: 30, label: 'structure_1' }, // Sukuk al-Ijarah
+            { from: 33, to: 30, label: 'structure_2' }, // Sukuk al-Mudarabah
+            { from: 36, to: 30, label: 'validates_form' }, // Urf -> Sukuk
+            { from: 31, to: 22, label: 'raises_capital' }, // SPV raises cash
+            { from: 14, to: 30, label: 'must_avoid' },   // Sukuk must avoid Riba
         ];
 
         // --- Styles ---
