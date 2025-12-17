@@ -14,10 +14,13 @@ def generate_graph():
     
     print("[2/3] Running Hadith Extractor...")
     subprocess.run(["python3", "extract_hadith.py"], check=True)
+
+    print("[2.5/3] Running Morphology Extractor...")
+    subprocess.run(["python3", "extract_morphology.py"], check=True)
     
     # 3. Combine Outputs
     print("[3/3] Combining into Master Ingest Script...")
-    filenames = ["output/quran_nodes.surql", "output/hadith_nodes.surql"]
+    filenames = ["output/quran_nodes.surql", "output/hadith_nodes.surql", "output/morphology.surql"]
     
     with open("output/ingest.surql", "w") as outfile:
         outfile.write("-- AL-MIZAN MASTER INGEST SCRIPT\n")

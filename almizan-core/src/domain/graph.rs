@@ -1,7 +1,7 @@
-use super::models::{FiqhRuling, QuranVerse, Hadith, DerivedFrom};
+use super::models::{DerivedFrom, FiqhRuling, Hadith, QuranVerse};
 use crate::repository::db::Database;
-use surrealdb::sql::Thing;
 use std::sync::Arc;
+use surrealdb::sql::Thing;
 
 pub struct GraphEngine {
     db: Arc<Database>,
@@ -14,19 +14,22 @@ impl GraphEngine {
 
     /// Finds the "Dalil" (Evidence) for a given Ruling ID.
     /// Traverses the DERIVED_FROM edge to find the Source (Verse or Hadith).
-    pub async fn find_evidence(&self, ruling_id: String) -> Result<Vec<EvidenceNode>, Box<dyn std::error::Error>> {
+    pub async fn find_evidence(
+        &self,
+        _ruling_id: String,
+    ) -> Result<Vec<EvidenceNode>, Box<dyn std::error::Error>> {
         // Query: Select all outgoing edges from the ruling to get the source
         // In SurrealDB Graph: SELECT ->DERIVED_FROM->(hadith, quran_verse) FROM ruling:id
-        
-        let sql = "SELECT ->DERIVED_FROM->? AS evidence FROM type::thing($ruling_id)";
-        
+
+        let _sql = "SELECT ->DERIVED_FROM->? AS evidence FROM type::thing($ruling_id)";
+
         // This is a simplified representation. In a real scenario we'd use strict typing.
         // For Proof of Concept, we return a generic structure or specific enums.
-        
+
         // Placeholder for compilation until we wire up the full query response parsing
         // In a real impl we would parse the result into QuranVerse or Hadith structs
-        
-        Ok(vec![]) 
+
+        Ok(vec![])
     }
 }
 

@@ -1,7 +1,7 @@
 use askama::Template;
 use axum::{
     response::Html,
-    routing::{get, post, get_service},
+    routing::{get, post},
     Router,
 };
 use tower_http::services::ServeDir;
