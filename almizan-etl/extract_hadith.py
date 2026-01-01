@@ -1,9 +1,6 @@
 import json
 import os
 
-import json
-import os
-
 def extract_hadith(json_path, output_path):
     print(f"Extracting Hadith Data from {json_path}...")
     
