@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Al-Mizan | The Tawhidic Knowledge Graph{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    <!-- Background Layers -->
+    <div class="landing-grid"></div>
+    <div class="landing-mandala">
+        <div class="mandala-ring mandala-ring-1"></div>
+        <div class="mandala-ring mandala-ring-2"></div>
+        <div class="mandala-ring mandala-ring-3"></div>
+    </div>
+    <div class="landing-glow"></div>
+
+    <!-- Main Content -->
+    <div class="landing-content">
+        
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                <span>System Operational • v1.0.4 Beta</span>
+            </div>
+            
+            <h1 class="hero-title">
+                The <span class="highlight">Tawhidic</span><br>
+                Knowledge Graph
+            </h1>
+            
+            <p class="hero-subtitle">
+                Operationalizing Islamic epistemology for the AI age.<br>
+                <strong>One Source of Truth. Infinite Applications.</strong>
+            </p>
+        </div>
+
+        <!-- Portal Cards -->
+        <div class="portal-grid">
+            
+            <!-- Certainty Engine -->
+            <a href="/" class="portal-card portal-card--blue">
+                <div class="portal-card__hover-gradient"></div>
+                <div class="portal-card__icon">📖</div>
+                <h3 class="portal-card__title">Certainty Engine</h3>
+                <span class="portal-card__tag">For Seekers (B2C)</span>
+                <p class="portal-card__desc">
+                    Semantic search engine for authenticated Islamic knowledge. 
+                    Verify rulings, check isnad chains, and learn with certainty.
+                </p>
+                <span class="portal-card__action">
+                    Launch App →
+                </span>
+            </a>
+
+            <!-- Credibility API -->
+            <a href="/citadel" class="portal-card portal-card--green">
+                <div class="portal-card__hover-gradient"></div>
+                <div class="portal-card__icon">⚡</div>
+                <h3 class="portal-card__title">Credibility API</h3>
+                <span class="portal-card__tag">For Institutions (B2B)</span>
+                <p class="portal-card__desc">
+                    Integrate verified knowledge into your AI models or platforms. 
+                    Reputation insurance and citation analytics dashboard.
+                </p>
+                <span class="portal-card__action">
+                    View Dashboard →
+                </span>
+            </a>
+
+            <!-- Scholarly Console -->
+            <a href="/presentation" class="portal-card portal-card--gold">
+                <div class="portal-card__hover-gradient"></div>
+                <div class="portal-card__icon">⚖️</div>
+                <h3 class="portal-card__title">Scholarly Console</h3>
+                <span class="portal-card__tag">Governance (Majlis)</span>
+                <p class="portal-card__desc">
+                    Tazkiyat al-Ilm (Knowledge Curation). Human-in-the-loop 
+                    verification tools for the Council of Scholars.
+                </p>
+                <span class="portal-card__action">
+                    Access Console 🔒
+                </span>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Footer Status Bar -->
+    <footer class="landing-footer">
+        <div class="landing-footer__inner">
+            <div class="landing-footer__stats">
+                <div class="stat-item">
+                    <span class="stat-dot stat-dot--green"></span>
+                    <span>Nodes: <span>12,450</span></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-dot stat-dot--green"></span>
+                    <span>Scholars: <span>840</span></span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-dot stat-dot--blue"></span>
+                    <span>Latency: <span>142ms</span></span>
+                </div>
+            </div>
+            <span>Al-Mizan © 2025 • Tawhidic Infrastructure</span>
+        </div>
+    </footer>
+</div>
+{% endblock %}

@@ -20,6 +20,18 @@ use repository::db::Database;
 #[template(path = "index.html")]
 struct IndexTemplate;
 
+#[derive(Template)]
+#[template(path = "landing.html")]
+struct LandingTemplate;
+
+#[derive(Template)]
+#[template(path = "presentation.html")]
+struct PresentationTemplate;
+
+#[derive(Template)]
+#[template(path = "governance.html")]
+struct GovernanceTemplate;
+
 #[tokio::main]
 async fn main() {
     // Initialize tracing
@@ -104,7 +116,9 @@ async fn main() {
         // )
         // .route("/strategy", get(api::v1::event::get_events))
         .route("/graph", get(graph_handler))
+        .route("/landing", get(landing_handler))
         .route("/presentation", get(presentation_handler))
+        .route("/governance", get(governance_handler))
         .nest_service("/static", ServeDir::new("static"))
         .route(
             "/favicon.ico",
@@ -133,7 +147,17 @@ async fn graph_handler() -> Html<String> {
     Html(template.render().unwrap())
 }
 
-// Presentation Handler (Placeholder)
+async fn landing_handler() -> Html<String> {
+    let template = LandingTemplate;
+    Html(template.render().unwrap())
+}
+
 async fn presentation_handler() -> Html<String> {
-    Html("<h1>Coming Soon: Presentation Mode</h1>".to_string())
+    let template = PresentationTemplate;
+    Html(template.render().unwrap())
+}
+
+async fn governance_handler() -> Html<String> {
+    let template = GovernanceTemplate;
+    Html(template.render().unwrap())
 }

@@ -3,238 +3,353 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Al-Mizan | Epistemic Architect</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/serif.min.css" id="theme">
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'mizan-gold': '#d4af37',
-                        'mizan-dark': '#0f172a',
-                        'mizan-green': '#064e3b',
-                        'parchment': '#fdfbf7',
-                    },
-                    fontFamily: {
-                        'cinzel': ['Cinzel', 'serif'],
-                        'amiri': ['Amiri', 'serif'],
-                        'inter': ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-
+    <title>Project Al-Mizan | Presentation</title>
+    <link rel="stylesheet" href="/static/css/style.css">
     <style>
-        /* Shared Styles */
-        body { 
-            background-color: #fdfbf7;
-            overflow: hidden; 
+        /* Presentation-specific styles */
+        .pres-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
         }
-
-        /* Presentation Specific Overrides */
-        .reveal { color: #333; }
-        .reveal h1, .reveal h2, .reveal h3 { font-family: 'Cinzel', serif; text-transform: none; color: #0f172a; }
-        .reveal p, .reveal li { font-family: 'Inter', sans-serif; }
-        .reveal .slide-number { color: #d4af37; }
         
-        /* The Graph Container within the slide */
-        #cy-slide {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #d4af37;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(5px);
-            border-radius: 8px;
+        .pres-slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            text-align: center;
         }
-
-        /* Mode Switcher */
-        #mode-switch {
+        
+        .pres-slide__content {
+            max-width: 900px;
+            width: 100%;
+        }
+        
+        .pres-slide h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+        
+        .pres-slide h2 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 2rem;
+        }
+        
+        .pres-slide h3 {
+            color: #10b981;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .pres-slide p {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .pres-slide__icon {
+            width: 64px;
+            height: 64px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            border: 2px solid var(--accent-gold);
+        }
+        
+        .pres-slide__badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--accent-gold);
+            border-radius: 9999px;
+            color: var(--accent-gold);
+            margin-top: 2rem;
+        }
+        
+        .pres-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            text-align: left;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .pres-card-grid { grid-template-columns: 1fr; }
+            .pres-slide h1 { font-size: 2.5rem; }
+        }
+        
+        .pres-card {
+            background: var(--bg-panel);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        
+        .pres-card--danger { border-left: 4px solid #ef4444; }
+        .pres-card--success { border-left: 4px solid #10b981; }
+        
+        .pres-card h4 {
+            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pres-card p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .pres-list {
+            list-style: none;
+            text-align: left;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        
+        .pres-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .pres-list li:last-child { border-bottom: none; }
+        
+        .pres-list__icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .phase-timeline {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .phase-card {
+            background: var(--bg-panel);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border-top: 4px solid;
+        }
+        
+        .phase-card:nth-child(1) { border-color: var(--text-muted); }
+        .phase-card:nth-child(2) { border-color: var(--accent-gold); }
+        .phase-card:nth-child(3) { border-color: #10b981; }
+        
+        .phase-card__num {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .phase-card__title {
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        .phase-card__desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        /* Navigation */
+        .pres-nav {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
-            opacity: 0.3;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+            background: var(--bg-panel);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .pres-nav__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pres-nav__dot:hover,
+        .pres-nav__dot.active {
+            background: var(--accent-gold);
+        }
+        
+        .pres-exit {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--bg-panel);
+            color: var(--text-muted);
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.5;
             transition: opacity 0.3s;
         }
-        #mode-switch:hover { opacity: 1; }
+        
+        .pres-exit:hover { opacity: 1; }
     </style>
 </head>
 <body>
-
-    <div class="reveal" id="presentation-layer">
-        <div class="slides">
-
-            <section>
-                <div class="flex flex-col items-center">
-                    <div class="w-16 h-16 bg-mizan-dark rounded-full flex items-center justify-center text-mizan-gold text-2xl mb-6 shadow-lg">
-                        <i class="fas fa-balance-scale"></i>
-                    </div>
-                    <h1>Project Al-Mizan</h1>
-                    <h3 class="text-mizan-green">Architecting the "Unity of Knowledge"</h3>
-                    <p class="text-sm mt-4 text-slate-500">From Epistemological Fragmentation to Digital Ontology</p>
-                    <div class="mt-8 border-t border-mizan-gold/30 pt-4 text-xs font-bold uppercase tracking-widest">
-                        Final Year Project Proposal
-                    </div>
-                </div>
-            </section>
-
-            <section>
+    <div class="pres-container" id="container">
+        
+        <!-- Slide 1: Title -->
+        <section class="pres-slide">
+            <div class="pres-slide__content">
+                <div class="pres-slide__icon">⚖️</div>
+                <h1>Project Al-Mizan</h1>
+                <h3>Architecting the "Unity of Knowledge"</h3>
+                <p>From Epistemological Fragmentation to Digital Ontology</p>
+                <span class="pres-slide__badge">Final Year Project Proposal</span>
+            </div>
+        </section>
+        
+        <!-- Slide 2: The Challenge -->
+        <section class="pres-slide">
+            <div class="pres-slide__content">
                 <h2>The Challenge: Context Collapse</h2>
-                <div class="text-left bg-white/50 p-4 rounded-xl border border-slate-200 shadow-sm" style="font-size: 0.9em;">
-                    <p class="fragment fade-up mb-2">
-                        <strong class="text-red-700">1. Fragmentation:</strong> 
-                        Current digital tools treat Islamic knowledge as isolated strings of text, severing the link between <em>Hukm</em> (Ruling) and <em>Usul</em> (Methodology).
-                    </p>
-                    <p class="fragment fade-up mb-2">
-                        <strong class="text-red-700">2. Loss of Isnad:</strong> 
-                        Algorithms prioritize engagement over authority, flattening the hierarchy of knowledge.
-                    </p>
-                    <p class="fragment fade-up">
-                        <strong class="text-red-700">3. The Consequence:</strong> 
-                        Interpretive anarchy. Without structural context, knowledge becomes susceptible to distortion.
-                    </p>
+                <div class="pres-card-grid">
+                    <div class="pres-card pres-card--danger">
+                        <h4>1. Fragmentation</h4>
+                        <p>Current digital tools treat Islamic knowledge as isolated strings of text, severing the link between <em>Hukm</em> (Ruling) and <em>Usul</em> (Methodology).</p>
+                    </div>
+                    <div class="pres-card pres-card--danger">
+                        <h4>2. Loss of Isnad</h4>
+                        <p>Algorithms prioritize engagement over authority, flattening the hierarchy of knowledge.</p>
+                    </div>
                 </div>
-            </section>
-
-            <section>
+                <p style="margin-top: 2rem;"><strong style="color: #ef4444;">The Consequence:</strong> Interpretive anarchy. Without structural context, knowledge becomes susceptible to distortion.</p>
+            </div>
+        </section>
+        
+        <!-- Slide 3: The Solution -->
+        <section class="pres-slide">
+            <div class="pres-slide__content">
                 <h2>The Solution: Digital Tawhid</h2>
-                <p class="text-xl italic text-slate-600 mb-8">
-                    "To digitize knowledge without its connections is to corrupt it."
-                </p>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-4 border border-slate-300 rounded bg-slate-100 opacity-50">
-                        <h4 class="text-sm uppercase font-bold">Relational Database</h4>
-                        <p class="text-xs">Rigid tables. Rows and Columns. Cannot model the organic complexity of scholarship.</p>
+                <p style="font-style: italic; color: var(--text-muted);">"To digitize knowledge without its connections is to corrupt it."</p>
+                <div class="pres-card-grid">
+                    <div class="pres-card" style="opacity: 0.5;">
+                        <h4>Relational Database</h4>
+                        <p>Rigid tables. Rows and Columns. Cannot model the organic complexity of scholarship.</p>
                     </div>
-                    <div class="p-4 border-2 border-mizan-green rounded bg-white shadow-lg transform scale-105">
-                        <h4 class="text-sm uppercase font-bold text-mizan-green">Knowledge Graph</h4>
-                        <p class="text-xs">Living nodes. Fluid edges. Maps the <strong>Genealogy of Ideas</strong> exactly as scholars transmitted them.</p>
+                    <div class="pres-card pres-card--success" style="transform: scale(1.02);">
+                        <h4>Knowledge Graph ✓</h4>
+                        <p>Living nodes. Fluid edges. Maps the <strong>Genealogy of Ideas</strong> exactly as scholars transmitted them.</p>
                     </div>
                 </div>
-            </section>
-
-            <section data-state="load-graph">
-                <h3>The Prototype</h3>
-                <div id="cy-slide"></div>
-                <p class="text-xs mt-2 text-slate-500"><i class="fas fa-mouse-pointer"></i> Interactive Epistemology: Draggable Nodes & Dynamic Relationships</p>
-            </section>
-
-            <section>
+            </div>
+        </section>
+        
+        <!-- Slide 4: Independence -->
+        <section class="pres-slide">
+            <div class="pres-slide__content">
                 <h2>Epistemic Independence</h2>
-                <ul class="space-y-4 text-left ml-12">
-                    <li class="fragment">
-                        <i class="fas fa-shield-alt text-mizan-gold mr-2"></i>
-                        <strong>Sovereign Infrastructure:</strong> <br>
-                        <span class="text-sm text-slate-600">Building a "Waqf-Grade" system not dependent on secular algorithm biases.</span>
+                <ul class="pres-list">
+                    <li>
+                        <span class="pres-list__icon">🛡️</span>
+                        <div>
+                            <strong>Sovereign Infrastructure</strong><br>
+                            <span style="color: var(--text-muted);">Building a "Waqf-Grade" system not dependent on secular algorithm biases.</span>
+                        </div>
                     </li>
-                    <li class="fragment">
-                        <i class="fas fa-check-circle text-mizan-green mr-2"></i>
-                        <strong>Verification Layer:</strong> <br>
-                        <span class="text-sm text-slate-600">A B2B model providing "Halal Compliance" APIs to sustain the open-source core.</span>
+                    <li>
+                        <span class="pres-list__icon">✅</span>
+                        <div>
+                            <strong>Verification Layer</strong><br>
+                            <span style="color: var(--text-muted);">A B2B model providing "Halal Compliance" APIs to sustain the open-source core.</span>
+                        </div>
                     </li>
                 </ul>
-            </section>
-
-            <section>
-                <h2>Future Scope</h2>
-                <div class="grid grid-cols-3 gap-2 mt-8">
-                    <div class="bg-white p-4 rounded shadow border-t-4 border-slate-400">
-                        <div class="text-2xl mb-2">Phase 1</div>
-                        <div class="text-xs font-bold">Foundation</div>
-                        <div class="text-[10px] text-slate-500 mt-2">Core Rust Engine & Graph Schema (In Progress)</div>
-                    </div>
-                    <div class="bg-white p-4 rounded shadow border-t-4 border-mizan-gold">
-                        <div class="text-2xl mb-2">Phase 2</div>
-                        <div class="text-xs font-bold">Ingestion</div>
-                        <div class="text-[10px] text-slate-500 mt-2">Mapping the primary Corpus of 6 Hadith Books</div>
-                    </div>
-                    <div class="bg-white p-4 rounded shadow border-t-4 border-mizan-green">
-                        <div class="text-2xl mb-2">Phase 3</div>
-                        <div class="text-xs font-bold">Standardization</div>
-                        <div class="text-[10px] text-slate-500 mt-2">Public API for "Verified Islamic Knowledge"</div>
-                    </div>
-                </div>
-                <div class="mt-12">
-                    <p class="font-bold">Q & A</p>
-                </div>
-            </section>
-
-        </div>
-    </div>
-
-    <a id="mode-switch" href="/graph" class="bg-slate-800 text-white px-3 py-1 rounded text-xs no-underline hover:bg-slate-700 transition">
-        Exit Presentation
-    </a>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
-    <script>
-        // --- Graph Logic for Slide 4 ---
-        let network = null;
+            </div>
+        </section>
         
-        const rawNodes = [
-            { id: 0, label: 'Allah', group: 'divine', title: 'The Lawgiver' },
-            { id: 1, label: 'Quran', group: 'wahi', title: 'Revelation' },
-            { id: 3, label: 'Usul', group: 'usul', title: 'Methodology' },
-            { id: 9, label: 'Fiqh', group: 'fiqh', title: 'Jurisprudence' },
-            { id: 12, label: 'Imam Shafi\'i', group: 'scholar', title: 'Jurist' },
-            { id: 13, label: 'Riba', group: 'fiqh', title: 'Prohibition' }
-        ];
-
-        const rawEdges = [
-            { from: 0, to: 1 }, { from: 1, to: 3 }, { from: 3, to: 9 },
-            { from: 12, to: 3 }, { from: 9, to: 13 }, { from: 1, to: 13 }
-        ];
-
-        function initGraph() {
-            const container = document.getElementById('cy-slide');
-            
-            // VisJS Data
-            const nodes = new vis.DataSet(rawNodes.map(n => ({
-                id: n.id, label: n.label, 
-                color: n.group === 'divine' ? '#0f172a' : (n.group === 'wahi' ? '#d97706' : '#64748b'),
-                font: { color: n.group === 'divine' ? 'white' : 'black' },
-                shape: n.group === 'scholar' ? 'star' : 'dot'
-            })));
-            
-            const edges = new vis.DataSet(rawEdges.map(e => ({ from: e.from, to: e.to })));
-
-            const options = {
-                nodes: { size: 25, font: { size: 16, face: 'Inter' } },
-                edges: { width: 2, color: { color: '#cbd5e1' } },
-                physics: { stabilization: false, barnesHut: { gravitationalConstant: -2000 } }
-            };
-
-            network = new vis.Network(container, { nodes, edges }, options);
-        }
-
-        // --- Reveal.js Init ---
-        Reveal.initialize({
-            hash: true,
-            transition: 'convex', // nice organic transition
-            controls: true,
-            progress: true,
+        <!-- Slide 5: Future Scope -->
+        <section class="pres-slide">
+            <div class="pres-slide__content">
+                <h2>Future Scope</h2>
+                <div class="phase-timeline">
+                    <div class="phase-card">
+                        <div class="phase-card__num">Phase 1</div>
+                        <div class="phase-card__title">Foundation</div>
+                        <div class="phase-card__desc">Core Rust Engine & Graph Schema (In Progress)</div>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-card__num">Phase 2</div>
+                        <div class="phase-card__title">Ingestion</div>
+                        <div class="phase-card__desc">Mapping the primary Corpus of 6 Hadith Books</div>
+                    </div>
+                    <div class="phase-card">
+                        <div class="phase-card__num">Phase 3</div>
+                        <div class="phase-card__title">Standardization</div>
+                        <div class="phase-card__desc">Public API for "Verified Islamic Knowledge"</div>
+                    </div>
+                </div>
+                <p style="margin-top: 3rem; font-weight: 700;">Q & A</p>
+            </div>
+        </section>
+        
+    </div>
+    
+    <nav class="pres-nav" id="nav"></nav>
+    <a href="/landing" class="pres-exit">← Exit Presentation</a>
+    
+    <script>
+        // Simple slide navigation
+        const container = document.getElementById('container');
+        const slides = document.querySelectorAll('.pres-slide');
+        const nav = document.getElementById('nav');
+        
+        // Generate nav dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.className = 'pres-nav__dot' + (i === 0 ? ' active' : '');
+            dot.onclick = () => slides[i].scrollIntoView({ behavior: 'smooth' });
+            nav.appendChild(dot);
         });
-
-        // Load graph only when Slide 4 is active
-        Reveal.on('slidechanged', event => {
-            if (event.currentSlide.getAttribute('data-state') === 'load-graph') {
-                if(!network) setTimeout(initGraph, 100);
-            }
-        });
-
-        function toggleMode() {
-            alert("This file is currently configured as the Presentation Deck only. To access the full App Dashboard, open graph.html");
-        }
+        
+        // Update active dot on scroll
+        const dots = document.querySelectorAll('.pres-nav__dot');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = Array.from(slides).indexOf(entry.target);
+                    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        slides.forEach(s => observer.observe(s));
     </script>
 </body>
 </html>
