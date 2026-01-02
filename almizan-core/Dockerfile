@@ -1,5 +1,5 @@
 # Build Stage
-FROM rust:1.75 as builder
+FROM rust:latest as builder
 
 WORKDIR /app
 COPY . .
@@ -17,10 +17,10 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y libssl-dev ca-certificates && rm -rf /var/lib/apt/lists/*
 
 # Copy the binary from the builder stage
-COPY --from=builder /app/target/release/backend /app/backend
+COPY --from=builder /app/target/release/almizan-core /app/almizan-core
 
 # Expose the application port
 EXPOSE 3000
 
 # Run the application
-CMD ["./backend"]
+CMD ["./almizan-core"]

@@ -49,10 +49,11 @@ This section guides you through submitting an enhancement suggestion, including 
 - Follow standard Rust formatting (`cargo fmt`).
 - Ensure `cargo clippy` passes without warnings.
 
-### TypeScript/SolidJS Styleguide
+### Python Styleguide (ETL)
 
-- Use Prettier for formatting.
-- Follow ESLint rules configured in the project.
+- Use `black` for formatting.
+- Include docstrings for all scripts and major functions.
+- Type hints are encouraged for data transformation logic.
 
 ## Development Setup
 

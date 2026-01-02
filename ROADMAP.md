@@ -1,8 +1,9 @@
 # Al-Mizan Strategic Roadmap
 
-## Phase 1: Foundation (Completed)
+## Phase 1: Foundation (In Progress)
 
 - [x] **Core Graph Structure**: Implemented initial schema for Verses, Hadith, Scholars, and Opinions.
+- [x] **Data Ingestion Plumbing**: Verified pipeline for Quran (Tanzil), Hadith (Sunnah.com/JSON), and Morphology.
 - [x] **Basic Visualization**: Interactive graph exploration using Cytoscape.js.
 - [x] **Governance Module**: Implemented "Algorithmic Shura" with 40-scholar consensus threshold.
 - [x] **Identity System**: Decentralized Identity (DID) and Verifiable Credentials (VC) for scholars.

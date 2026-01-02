@@ -1,11 +1,10 @@
-version: '3.8'
-
 services:
   almizan-db:
-    image: surrealdb/surrealdb:v2.1.4
+    image: surrealdb/surrealdb:latest
+    user: root
     ports:
       - "8000:8000"
-    command: start --log debug --user root --pass root memory
+    command: start --log debug --user root --pass root file:///mydata/surreal.db
     volumes:
       - surreal_data:/mydata
 
@@ -19,6 +18,7 @@ services:
       - DB_PASS=root
       - DB_NS=idc
       - DB_DB=main
+      - JWT_SECRET=${JWT_SECRET:-CHANGE_ME_IN_PRODUCTION_32CHARS}
     depends_on:
       - almizan-db
 

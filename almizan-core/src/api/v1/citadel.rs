@@ -6,6 +6,15 @@ use serde::Serialize;
 #[template(path = "citadel.html")]
 pub struct CitadelDashboardTemplate;
 
+#[derive(Template)]
+#[template(path = "playground.html")]
+pub struct PlaygroundTemplate;
+
+pub async fn playground() -> impl axum::response::IntoResponse {
+    let template = PlaygroundTemplate;
+    Html(template.render().unwrap())
+}
+
 #[derive(Serialize)]
 pub struct SnapshotMetadata {
     pub id: String,

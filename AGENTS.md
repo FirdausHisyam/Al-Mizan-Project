@@ -15,8 +15,8 @@ You are the Lead Engineer for this research initiative.
 ## 3. Technical Stack
 
 * **Database**: SurrealDB (Graph + Document). Focus on performant edge traversal.
-* **Backend**: Rust. Prioritizing memory safety and concurrency.
-* **Data Pipeline**: Python (ETL). Converting text corpora into structured nodes.
+* **Backend**: Rust (Axum). Prioritizing type safety, memory safety, and concurrency.
+* **Data Pipeline**: Python (ETL). Converts raw XML (Tanzil), JSON (Hadith), and Morphology data into valid SurQL statements.
 
 ## 4. Ontology Rules
 

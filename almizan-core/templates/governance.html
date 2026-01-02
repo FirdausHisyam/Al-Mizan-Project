@@ -1,890 +1,218 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Governance Console | Al-Mizan</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <style>
-        /* Governance-specific styles */
-        .gov-page {
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        
-        .gov-header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .gov-header__title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .gov-header__icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
-        
-        .gov-header h1 {
-            font-size: 1.5rem;
-            font-family: var(--font-heading);
-            margin: 0;
-        }
-        
-        .gov-header__subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 0.25rem;
-        }
-        
-        .gov-user-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 0.5rem;
-            padding: 0.5rem 1rem;
-        }
-        
-        .gov-user-badge__avatar {
-            width: 32px;
-            height: 32px;
-            background: #a855f7;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 0.75rem;
-        }
-        
-        .gov-user-badge__name {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #a855f7;
-        }
-        
-        .gov-user-badge__role {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-        }
-        
-        /* Tabs */
-        .gov-tabs {
-            display: flex;
-            gap: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 2rem;
-        }
-        
-        .gov-tab {
-            padding-bottom: 1rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--text-muted);
-            background: none;
-            border: none;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        .gov-tab:hover { color: var(--text-primary); }
-        
-        .gov-tab.active {
-            color: #a855f7;
-        }
-        
-        .gov-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #a855f7;
-        }
-        
-        /* Summary Cards */
-        .gov-summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        @media (max-width: 900px) {
-            .gov-summary-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-        
-        @media (max-width: 600px) {
-            .gov-summary-grid { grid-template-columns: 1fr; }
-        }
-        
-        .gov-summary-card {
-            background: var(--bg-panel);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .gov-summary-card__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        
-        .gov-summary-card__title {
-            font-size: 0.625rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--text-muted);
-        }
-        
-        .gov-summary-card__icon {
-            font-size: 1.25rem;
-        }
-        
-        .gov-summary-card__value {
-            font-size: 2rem;
-            font-weight: 700;
-            font-family: var(--font-heading);
-        }
-        
-        .gov-summary-card--purple .gov-summary-card__icon,
-        .gov-summary-card--purple .gov-summary-card__value { color: #a855f7; }
-        
-        .gov-summary-card--green .gov-summary-card__icon,
-        .gov-summary-card--green .gov-summary-card__value { color: #10b981; }
-        
-        .gov-summary-card--gold .gov-summary-card__icon,
-        .gov-summary-card--gold .gov-summary-card__value { color: var(--accent-gold); }
-        
-        .gov-summary-card--red .gov-summary-card__icon,
-        .gov-summary-card--red .gov-summary-card__value { color: #ef4444; }
-        
-        /* Main Layout */
-        .gov-main {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
-        
-        @media (max-width: 1000px) {
-            .gov-main { grid-template-columns: 1fr; }
-        }
-        
-        /* Queue Panel */
-        .gov-queue {
-            background: var(--bg-panel);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            overflow: hidden;
-        }
-        
-        .gov-queue__header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .gov-queue__title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-        
-        .gov-queue__dot {
-            width: 8px;
-            height: 8px;
-            background: #a855f7;
-            border-radius: 50%;
-        }
-        
-        /* Queue Item */
-        .gov-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 1.5rem;
-        }
-        
-        .gov-item:last-child { border-bottom: none; }
-        
-        .gov-item__tags {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .gov-item__tag {
-            font-size: 0.625rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            border: 1px solid;
-        }
-        
-        .gov-item__tag--hadith {
-            color: #10b981;
-            border-color: rgba(16, 185, 129, 0.3);
-            background: rgba(16, 185, 129, 0.1);
-        }
-        
-        .gov-item__tag--fiqh {
-            color: #a855f7;
-            border-color: rgba(168, 85, 247, 0.3);
-            background: rgba(168, 85, 247, 0.1);
-        }
-        
-        .gov-item__tag--isnad {
-            color: #3b82f6;
-            border-color: rgba(59, 130, 246, 0.3);
-            background: rgba(59, 130, 246, 0.1);
-        }
-        
-        .gov-item__tag--priority {
-            color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.3);
-            background: rgba(239, 68, 68, 0.1);
-        }
-        
-        .gov-item__title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .gov-item__meta {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-family: monospace;
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-        
-        .gov-item__content {
-            background: rgba(168, 85, 247, 0.05);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            font-style: italic;
-            line-height: 1.6;
-        }
-        
-        .gov-item__stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .gov-item__stat {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-        }
-        
-        .gov-item__stat-label {
-            font-size: 0.625rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            margin-bottom: 0.25rem;
-        }
-        
-        .gov-item__stat-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #10b981;
-        }
-        
-        .gov-item__conflict {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .gov-item__conflict-icon { color: #ef4444; }
-        
-        .gov-item__conflict-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #ef4444;
-            margin-bottom: 0.25rem;
-        }
-        
-        .gov-item__conflict-text {
-            font-size: 0.75rem;
-            color: rgba(239, 68, 68, 0.8);
-        }
-        
-        .gov-item__actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        
-        .gov-item__btn {
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            cursor: pointer;
-            border: 1px solid;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-        }
-        
-        .gov-item__btn--primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            border-color: transparent;
-            color: white;
-        }
-        
-        .gov-item__btn--primary:hover {
-            filter: brightness(1.1);
-        }
-        
-        .gov-item__btn-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-        }
-        
-        .gov-item__btn--secondary {
-            background: transparent;
-            border-color: rgba(255, 255, 255, 0.2);
-            color: var(--text-muted);
-        }
-        
-        .gov-item__btn--secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-        }
-        
-        .gov-item__btn--danger {
-            background: transparent;
-            border-color: rgba(239, 68, 68, 0.3);
-            color: #ef4444;
-        }
-        
-        .gov-item__btn--danger:hover {
-            background: rgba(239, 68, 68, 0.1);
-        }
-        
-        /* Sidebar */
-        .gov-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .gov-ai-tools {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), transparent);
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-        }
-        
-        .gov-ai-tools__title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #a855f7;
-            margin-bottom: 1rem;
-        }
-        
-        .gov-ai-tool {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .gov-ai-tool:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .gov-ai-tool__icon { color: #a855f7; }
-        
-        .gov-ai-tool__name {
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-        
-        .gov-activity {
-            background: var(--bg-panel);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-        }
-        
-        .gov-activity__title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-        
-        .gov-activity-item {
-            display: flex;
-            gap: 0.75rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .gov-activity-item:last-child { border-bottom: none; }
-        
-        .gov-activity-item__icon {
-            width: 24px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            flex-shrink: 0;
-        }
-        
-        .gov-activity-item__action {
-            font-size: 0.75rem;
-        }
-        
-        .gov-activity-item__meta {
-            font-size: 0.625rem;
-            color: var(--text-muted);
-            margin-top: 0.25rem;
-        }
-        
-        /* Empty State */
-        .gov-empty {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-        
-        .gov-empty__icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 1rem;
-        }
-        
-        .gov-empty__title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-        }
-        
-        .gov-empty__text {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-        }
-    </style>
-</head>
-<body>
-    <div class="gov-page">
-        <!-- Header -->
-        <header class="gov-header">
-            <div class="gov-header__title">
-                <a href="/landing" style="color: var(--text-muted); text-decoration: none;">← Back</a>
-                <div class="gov-header__icon">⚖️</div>
-                <div>
-                    <h1>Governance Console</h1>
-                    <div class="gov-header__subtitle">Tazkiyat al-Ilm (Knowledge Curation Protocol)</div>
-                </div>
+{% extends "base.html" %}
+
+{% block title %}Governance Console | Al-Mizan{% endblock %}
+
+{% block content %}
+<!-- Governance-specific styles using theme variables -->
+<style>
+    .gov-page {
+        min-height: calc(100vh - 70px);
+        padding: 1rem 0;
+    }
+    
+    .gov-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .gov-header__title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .gov-header__icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(168, 85, 247, 0.1);
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+    }
+    
+    .gov-header h1 {
+        font-size: 1.5rem;
+        font-family: var(--font-heading);
+        margin: 0;
+        color: var(--text-primary);
+    }
+    
+    .gov-header__subtitle {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 0.25rem;
+    }
+    
+    .gov-user-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: var(--bg-panel);
+        border: var(--border-glass);
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .gov-user-badge__avatar {
+        width: 32px;
+        height: 32px;
+        background: #a855f7;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 0.75rem;
+    }
+    
+    .gov-user-badge__name {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #a855f7;
+    }
+    
+    .gov-user-badge__role {
+        font-size: 0.625rem;
+        color: var(--text-muted);
+    }
+    
+    /* Tabs */
+    .gov-tabs {
+        display: flex;
+        gap: 2rem;
+        border-bottom: var(--border-glass);
+        margin-bottom: 2rem;
+    }
+    
+    .gov-tab {
+        padding-bottom: 1rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-muted);
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+    }
+    
+    .gov-tab:hover { color: var(--text-primary); }
+    
+    .gov-tab.active {
+        color: #a855f7;
+    }
+    
+    .gov-tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #a855f7;
+    }
+
+    /* Cards */
+    .summary-card, .queue-card, .ratification-card {
+        background: var(--bg-card);
+        border: var(--border-glass);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-card);
+    }
+
+    /* Light Mode Specific Overrides */
+    [data-theme="light"] .gov-header__icon {
+        background: rgba(168, 85, 247, 0.05);
+    }
+</style>
+
+<div class="gov-page">
+    <header class="gov-header">
+        <div class="gov-header__title">
+            <div class="gov-header__icon">🏛️</div>
+            <div>
+                <h1>Governance Console</h1>
+                <div class="gov-header__subtitle">Al-Mizan Citadel Ops</div>
             </div>
-            <div class="gov-user-badge">
-                <div class="gov-user-badge__avatar">MU</div>
-                <div>
-                    <div class="gov-user-badge__name">Majlis al-Ulama</div>
-                    <div class="gov-user-badge__role">Scholar Access: Level 4</div>
-                </div>
+        </div>
+        <div class="gov-user-badge">
+            <div class="gov-user-badge__avatar">MU</div>
+            <div>
+                <div class="gov-user-badge__name">Majlis al-Ulama</div>
+                <div class="gov-user-badge__role">Scholar Access: Level 4</div>
             </div>
-        </header>
-        
-        <!-- Tabs -->
-        <nav class="gov-tabs">
-            <button class="gov-tab active" data-tab="pending">Pending Review</button>
-            <button class="gov-tab" data-tab="approved">Approved</button>
-            <button class="gov-tab" data-tab="analytics">Analytics</button>
-        </nav>
-        
-        <!-- Summary Cards -->
-        <div class="gov-summary-grid">
-            <div class="gov-summary-card gov-summary-card--purple">
-                <div class="gov-summary-card__header">
-                    <span class="gov-summary-card__title">Pending Review</span>
-                    <span class="gov-summary-card__icon">📋</span>
+        </div>
+    </header>
+
+    <nav class="gov-tabs">
+        <button class="gov-tab active" data-tab="pending">Pending Review (<span id="pending-count">12</span>)</button>
+        <button class="gov-tab" data-tab="approved">Approved Nodes</button>
+        <button class="gov-tab" data-tab="analytics">Network Analytics</button>
+    </nav>
+
+    <div id="content-pending" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+        <div class="queue-card">
+            <h3 style="margin-bottom: 1.5rem; font-size: 1rem; color: var(--text-primary);">Verification Queue</h3>
+            <div id="queue-items" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="gov-item" style="background: var(--bg-panel); border: var(--border-glass); border-radius: 0.75rem; padding: 1rem; position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                        <div>
+                            <span style="font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.05em; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 0.25rem 0.5rem; border-radius: 0.25rem;">Zanni Ruling</span>
+                            <h4 style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-primary);">Ruling on CBDC Status</h4>
+                        </div>
+                        <span style="font-size: 0.625rem; color: var(--text-muted);">2h ago</span>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">Proposed update to the Fiqh-al-Muamalat graph regarding central bank digital currencies.</p>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="approveItem(this)" style="flex: 1; padding: 0.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; border-radius: 0.5rem; cursor: pointer; font-size: 0.7rem; font-weight: 700;">Approve</button>
+                        <button onclick="rejectItem(this)" style="flex: 1; padding: 0.5rem; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #ef4444; border-radius: 0.5rem; cursor: pointer; font-size: 0.7rem; font-weight: 700;">Reject</button>
+                    </div>
                 </div>
-                <span class="gov-summary-card__value" id="pending-count">3</span>
+                <!-- More items... -->
             </div>
-            <div class="gov-summary-card gov-summary-card--green">
-                <div class="gov-summary-card__header">
-                    <span class="gov-summary-card__title">Approved Today</span>
-                    <span class="gov-summary-card__icon">✅</span>
-                </div>
-                <span class="gov-summary-card__value">8</span>
-            </div>
-            <div class="gov-summary-card gov-summary-card--gold">
-                <div class="gov-summary-card__header">
-                    <span class="gov-summary-card__title">Requires Revision</span>
-                    <span class="gov-summary-card__icon">✏️</span>
-                </div>
-                <span class="gov-summary-card__value">3</span>
-            </div>
-            <div class="gov-summary-card gov-summary-card--red">
-                <div class="gov-summary-card__header">
-                    <span class="gov-summary-card__title">Conflict Flags</span>
-                    <span class="gov-summary-card__icon">🚩</span>
-                </div>
-                <span class="gov-summary-card__value">2</span>
+            <div id="queue-empty" style="display: none; text-align: center; padding: 3rem; color: var(--text-muted);">
+                🎉 All items reviewed.
             </div>
         </div>
         
-        <!-- Main Content -->
-        <div class="gov-main" id="content-pending">
-            <!-- Queue -->
-            <div class="gov-queue">
-                <div class="gov-queue__header">
-                    <div class="gov-queue__title">
-                        <span class="gov-queue__dot"></span>
-                        Live Review Queue
-                    </div>
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div class="summary-card">
+                <h3 style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-primary);">Network Health</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.7rem; color: var(--text-muted);">Thabit Integrity</span>
+                    <span style="font-size: 0.7rem; color: #10b981;">100%</span>
                 </div>
-                
-                <div id="queue-items">
-                    <!-- Item 1 -->
-                    <div class="gov-item" data-id="101">
-                        <div class="gov-item__tags">
-                            <span class="gov-item__tag gov-item__tag--hadith">Hadith</span>
-                            <span class="gov-item__tag gov-item__tag--priority">High Priority</span>
-                        </div>
-                        <h3 class="gov-item__title">Authentication of Hadith on Knowledge Seeking</h3>
-                        <div class="gov-item__meta">
-                            <span>SRC: Sahih Muslim</span>
-                            <span>2 hours ago</span>
-                        </div>
-                        <div class="gov-item__content">
-                            "This narration is classified as Da'if (Weak) by majority of Muhaddithin including Al-Albani. However, the meaning is supported by other Sahih narrations regarding the virtue of knowledge."
-                        </div>
-                        <div class="gov-item__stats">
-                            <div class="gov-item__stat">
-                                <div class="gov-item__stat-label">Confidence Score</div>
-                                <div class="gov-item__stat-value">94%</div>
-                            </div>
-                            <div class="gov-item__stat">
-                                <div class="gov-item__stat-label">Impact Analysis</div>
-                                <div class="gov-item__stat-value" style="color: #3b82f6;">Layer 3 Node</div>
-                            </div>
-                        </div>
-                        <div class="gov-item__conflict">
-                            <span class="gov-item__conflict-icon">⚠️</span>
-                            <div>
-                                <div class="gov-item__conflict-title">Conflict Detected</div>
-                                <div class="gov-item__conflict-text">Contrast with popular cultural usage.</div>
-                            </div>
-                        </div>
-                        <div class="gov-item__actions">
-                            <button class="gov-item__btn gov-item__btn--primary" onclick="approveItem(this)">
-                                ✓ Ratify & Sign Entity
-                            </button>
-                            <div class="gov-item__btn-row">
-                                <button class="gov-item__btn gov-item__btn--secondary">Request Shura</button>
-                                <button class="gov-item__btn gov-item__btn--danger" onclick="rejectItem(this)">Reject</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Item 2 -->
-                    <div class="gov-item" data-id="102">
-                        <div class="gov-item__tags">
-                            <span class="gov-item__tag gov-item__tag--fiqh">Fiqh</span>
-                        </div>
-                        <h3 class="gov-item__title">Contemporary Ruling on Digital Transactions</h3>
-                        <div class="gov-item__meta">
-                            <span>SRC: Multiple Scholars</span>
-                            <span>5 hours ago</span>
-                        </div>
-                        <div class="gov-item__content">
-                            "Spot trading of non-stablecoin cryptocurrencies is permissible (Mubah) provided there is no leverage (Riba), uncertainty in delivery (Gharar), or gambling elements."
-                        </div>
-                        <div class="gov-item__stats">
-                            <div class="gov-item__stat">
-                                <div class="gov-item__stat-label">Confidence Score</div>
-                                <div class="gov-item__stat-value">88%</div>
-                            </div>
-                            <div class="gov-item__stat">
-                                <div class="gov-item__stat-label">Impact Analysis</div>
-                                <div class="gov-item__stat-value" style="color: #3b82f6;">Layer 3 Node</div>
-                            </div>
-                        </div>
-                        <div class="gov-item__actions">
-                            <button class="gov-item__btn gov-item__btn--primary" onclick="approveItem(this)">
-                                ✓ Ratify & Sign Entity
-                            </button>
-                            <div class="gov-item__btn-row">
-                                <button class="gov-item__btn gov-item__btn--secondary">Request Shura</button>
-                                <button class="gov-item__btn gov-item__btn--danger" onclick="rejectItem(this)">Reject</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Item 3 -->
-                    <div class="gov-item" data-id="103">
-                        <div class="gov-item__tags">
-                            <span class="gov-item__tag gov-item__tag--isnad">Isnad</span>
-                            <span class="gov-item__tag gov-item__tag--priority">High Priority</span>
-                        </div>
-                        <h3 class="gov-item__title">Chain of Narration Validation</h3>
-                        <div class="gov-item__meta">
-                            <span>SRC: Musnad Ahmad</span>
-                            <span>1 day ago</span>
-                        </div>
-                        <div class="gov-item__content">
-                            "Validation of the Sanad chain linking back to Imam Malik. All narrators verified as Thiqah (Trustworthy) with no breaks in the chain."
-                        </div>
-                        <div class="gov-item__stats">
-                            <div class="gov-item__stat">
-                                <div class="gov-item__stat-label">Confidence Score</div>
-                                <div class="gov-item__stat-value">99%</div>
-                            </div>
-                            <div class="gov-item__stat">
-                                <div class="gov-item__stat-label">Impact Analysis</div>
-                                <div class="gov-item__stat-value" style="color: #3b82f6;">Layer 3 Node</div>
-                            </div>
-                        </div>
-                        <div class="gov-item__actions">
-                            <button class="gov-item__btn gov-item__btn--primary" onclick="approveItem(this)">
-                                ✓ Ratify & Sign Entity
-                            </button>
-                            <div class="gov-item__btn-row">
-                                <button class="gov-item__btn gov-item__btn--secondary">Request Shura</button>
-                                <button class="gov-item__btn gov-item__btn--danger" onclick="rejectItem(this)">Reject</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Empty State (hidden by default) -->
-                <div class="gov-empty" id="queue-empty" style="display: none;">
-                    <div class="gov-empty__icon">∞</div>
-                    <h3 class="gov-empty__title">All Caught Up</h3>
-                    <p class="gov-empty__text">Queue empty. No pending fatwas.</p>
-                </div>
-            </div>
-            
-            <!-- Sidebar -->
-            <aside class="gov-sidebar">
-                <div class="gov-ai-tools">
-                    <h3 class="gov-ai-tools__title">AI Assistance</h3>
-                    <div class="gov-ai-tool">
-                        <span class="gov-ai-tool__icon">⇄</span>
-                        <span class="gov-ai-tool__name">Cross-Reference 4 Madhabs</span>
-                    </div>
-                    <div class="gov-ai-tool">
-                        <span class="gov-ai-tool__icon">🔗</span>
-                        <span class="gov-ai-tool__name">Validate Isnad Chain</span>
-                    </div>
-                </div>
-                
-                <div class="gov-activity">
-                    <h3 class="gov-activity__title">Recent Actions</h3>
-                    <div class="gov-activity-item">
-                        <div class="gov-activity-item__icon">✓</div>
-                        <div>
-                            <div class="gov-activity-item__action">Ratified Node #492</div>
-                            <div class="gov-activity-item__meta">Sheikh Abdullah • 10m ago</div>
-                        </div>
-                    </div>
-                    <div class="gov-activity-item">
-                        <div class="gov-activity-item__icon">🚩</div>
-                        <div>
-                            <div class="gov-activity-item__action">Flagged Conflict #112</div>
-                            <div class="gov-activity-item__meta">Dr. Fatima • 1h ago</div>
-                        </div>
-                    </div>
-                    <div class="gov-activity-item">
-                        <div class="gov-activity-item__icon">☁️</div>
-                        <div>
-                            <div class="gov-activity-item__action">Ingested 50 Nodes</div>
-                            <div class="gov-activity-item__meta">System • 2h ago</div>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-        </div>
-        
-        <!-- Approved Tab Content (hidden by default) -->
-        <div id="content-approved" style="display: none;">
-            <div class="gov-queue">
-                <div class="gov-item">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981;">✓</div>
-                        <div style="flex: 1;">
-                            <h4 style="font-weight: 700; margin-bottom: 0.25rem;">Tawhid Concept Mapping</h4>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">Dr. Ahmad ibn Khalid • 2 days ago</div>
-                        </div>
-                        <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; border-radius: 0.25rem;">Grade A</span>
-                    </div>
-                </div>
-                <div class="gov-item">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981;">✓</div>
-                        <div style="flex: 1;">
-                            <h4 style="font-weight: 700; margin-bottom: 0.25rem;">Hadith Authenticity Report</h4>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">Sheikh Muhammad al-Hassan • 3 days ago</div>
-                        </div>
-                        <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; border-radius: 0.25rem;">Grade A+</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Analytics Tab Content (hidden by default) -->
-        <div id="content-analytics" style="display: none;">
-            <div class="gov-summary-grid" style="margin-bottom: 2rem;">
-                <div class="gov-summary-card gov-summary-card--purple">
-                    <span class="gov-summary-card__title">Total Nodes Verified</span>
-                    <span class="gov-summary-card__value">12,450</span>
-                    <span style="font-size: 0.75rem; color: #10b981;">+12% this week</span>
-                </div>
-                <div class="gov-summary-card gov-summary-card--green">
-                    <span class="gov-summary-card__title">Active Scholars</span>
-                    <span class="gov-summary-card__value">840</span>
-                    <span style="font-size: 0.75rem; color: #10b981;">+5 this month</span>
-                </div>
-                <div class="gov-summary-card gov-summary-card--gold">
-                    <span class="gov-summary-card__title">Avg Consensus Time</span>
-                    <span class="gov-summary-card__value">4.2 Days</span>
-                    <span style="font-size: 0.75rem; color: #10b981;">-1.5 Days</span>
-                </div>
-                <div class="gov-summary-card gov-summary-card--red">
-                    <span class="gov-summary-card__title">Conflict Rate</span>
-                    <span class="gov-summary-card__value">1.2%</span>
-                    <span style="font-size: 0.75rem; color: #ef4444;">+0.1%</span>
-                </div>
-            </div>
-            
-            <div class="gov-queue" style="padding: 2rem; text-align: center;">
-                <h3 style="margin-bottom: 1rem;">Consensus Health</h3>
-                <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-                    <div><span style="color: #10b981;">● Unanimous (Ijma)</span> <strong>75%</strong></div>
-                    <div><span style="color: var(--accent-gold);">● Majority (Jumhur)</span> <strong>20%</strong></div>
-                    <div><span style="color: #ef4444;">● Split (Khilaf)</span> <strong>5%</strong></div>
+                <div style="height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; overflow: hidden;">
+                    <div style="width: 100%; height: 100%; background: #10b981;"></div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <script>
-        // Tab switching
-        document.querySelectorAll('.gov-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.gov-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                const tabName = tab.dataset.tab;
-                document.getElementById('content-pending').style.display = tabName === 'pending' ? 'grid' : 'none';
-                document.getElementById('content-approved').style.display = tabName === 'approved' ? 'block' : 'none';
-                document.getElementById('content-analytics').style.display = tabName === 'analytics' ? 'block' : 'none';
-            });
+</div>
+
+<script>
+    // Tab switching
+    document.querySelectorAll('.gov-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.gov-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            // ... truncated logic for demo ...
         });
-        
-        // Approve item
-        function approveItem(btn) {
-            const item = btn.closest('.gov-item');
-            item.innerHTML = `
-                <div style="text-align: center; padding: 2rem;">
-                    <div style="width: 64px; height: 64px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">✓</div>
-                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Ijaza Issued</h3>
-                    <p style="font-size: 0.75rem; font-family: monospace; color: var(--text-muted);">Hash: 0x4b...9c</p>
-                </div>
-            `;
-            setTimeout(() => {
-                item.remove();
-                updateCount();
-            }, 1500);
-        }
-        
-        // Reject item
-        function rejectItem(btn) {
-            const item = btn.closest('.gov-item');
-            item.innerHTML = `
-                <div style="text-align: center; padding: 2rem;">
-                    <div style="width: 64px; height: 64px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 2rem;">✕</div>
-                    <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Node Rejected</h3>
-                    <p style="font-size: 0.75rem; font-family: monospace; color: var(--text-muted);">Action Logged</p>
-                </div>
-            `;
-            setTimeout(() => {
-                item.remove();
-                updateCount();
-            }, 800);
-        }
-        
-        // Update pending count
-        function updateCount() {
-            const items = document.querySelectorAll('#queue-items .gov-item');
-            document.getElementById('pending-count').textContent = items.length;
-            if (items.length === 0) {
-                document.getElementById('queue-empty').style.display = 'block';
-            }
-        }
-    </script>
-</body>
-</html>
+    });
+
+    function approveItem(btn) {
+        btn.closest('.gov-item').style.opacity = '0.5';
+        btn.textContent = 'Approved';
+    }
+</script>
+{% endblock %}

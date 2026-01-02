@@ -38,7 +38,7 @@ pub async fn signup(
         .to_string();
 
     // 2. Create User in DB (Simplified for MVP)
-    let sql = "CREATE user SET email = $email, password = $password, role = 'user'";
+    let sql = "CREATE user SET email = $email, password = $password, role = 'student'";
     let _created: Option<serde_json::Value> = db
         .client
         .query(sql)
@@ -89,10 +89,13 @@ pub async fn signin(
                 exp: expiration as usize,
             };
 
+            let jwt_secret = std::env::var("JWT_SECRET")
+                .unwrap_or_else(|_| "INSECURE_DEV_SECRET_CHANGE_ME_32CH".to_string());
+
             let token = encode(
                 &Header::default(),
                 &claims,
-                &EncodingKey::from_secret("secret".as_ref()),
+                &EncodingKey::from_secret(jwt_secret.as_bytes()),
             )
             .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 

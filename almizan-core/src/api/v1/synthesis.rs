@@ -54,7 +54,7 @@ pub async fn synthesize_topic(Json(payload): Json<SynthesisRequest>) -> impl Int
                     0.6,
                     "Permissible (Minority/Loose). Some scholars view it as a digital asset. CAUTION: This is a minority opinion.".to_string(),
                     "Sheikh Joe Crypto (Modernist)".to_string(),
-                    "https://api.dicebear.com/7.x/avataaars/svg?seed=Joe".to_string(),
+                    "https://api.dicebear.com/7.x/shapes/svg?seed=Joe".to_string(),
                     "http://schema.org/Approved".to_string(),
                 )
             } else {
@@ -63,7 +63,7 @@ pub async fn synthesize_topic(Json(payload): Json<SynthesisRequest>) -> impl Int
                     0.4, // Below 0.5 for strict
                     "Disputed (Strict Default). Significant scholarly disagreement regarding Gharar and lack of intrinsic value. Proceed with caution.".to_string(),
                     "Imam Al-Ghazali (Derived)".to_string(),
-                    "https://api.dicebear.com/7.x/avataaars/svg?seed=Ghazali".to_string(),
+                    "https://api.dicebear.com/7.x/shapes/svg?seed=Ghazali".to_string(),
                     "http://schema.org/Pending".to_string(),
                 )
             }
@@ -74,7 +74,7 @@ pub async fn synthesize_topic(Json(payload): Json<SynthesisRequest>) -> impl Int
             "Major Prohibition (Consensus). Riba is universally prohibited in all its forms."
                 .to_string(),
             "The Four Imams (Consensus)".to_string(),
-            "https://api.dicebear.com/7.x/avataaars/svg?seed=Consensus".to_string(),
+            "https://api.dicebear.com/7.x/shapes/svg?seed=Consensus".to_string(),
             "http://schema.org/Rejected".to_string(),
         ),
         "gold" => (
@@ -82,7 +82,7 @@ pub async fn synthesize_topic(Json(payload): Json<SynthesisRequest>) -> impl Int
             1.0,
             "Permissible (Majority). Gold is the standard of value in Islamic Finance.".to_string(),
             "Imam Malik".to_string(),
-            "https://api.dicebear.com/7.x/avataaars/svg?seed=Malik".to_string(),
+            "https://api.dicebear.com/7.x/shapes/svg?seed=Malik".to_string(),
             "http://schema.org/Approved".to_string(),
         ),
         _ => (
@@ -90,7 +90,7 @@ pub async fn synthesize_topic(Json(payload): Json<SynthesisRequest>) -> impl Int
             0.5,
             "Topic analysis in progress. Consensus not yet reached.".to_string(),
             "Al-Mizan Synthesis Engine".to_string(),
-            "https://api.dicebear.com/7.x/bottts/svg?seed=Mizan".to_string(),
+            "https://api.dicebear.com/7.x/shapes/svg?seed=Mizan".to_string(),
             "http://schema.org/Pending".to_string(),
         ),
     };

@@ -4,32 +4,32 @@
 
 {% block content %}
     <div style="text-align: center; margin-bottom: 4rem;">
-        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #94A3B8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Certainty Engine</h1>
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; background: linear-gradient(to right, var(--accent-gold), var(--text-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px rgba(184, 134, 11, 0.2));">Certainty Engine</h1>
         <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
             Verify the authenticity of Islamic texts against the Tawhidic Knowledge Graph.
         </p>
-        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
-            <a href="/graph" class="button" style="text-decoration: none; display: inline-block;">Explore Graph</a>
-            <a href="/citadel" class="button" style="text-decoration: none; display: inline-block; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4);">Citadel Ops</a>
+        <div style="margin-top: 2rem; display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+            <a href="/graph" class="button" style="text-decoration: none; display: inline-block; padding: 0.75rem 1.5rem;">Explore Graph</a>
+            <a href="/citadel" class="button" style="text-decoration: none; display: inline-block; padding: 0.75rem 1.5rem; background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.3); color: #3b82f6;">Citadel Ops</a>
         </div>
     </div>
     
-    <div class="card glass" style="max-width: 700px; margin: 0 auto;">
-        <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--primary);">Ask the Digital Mufti</h2>
-        <form hx-post="/api/v1/synthesis" hx-target="#result" hx-swap="innerHTML" hx-indicator="#spinner">
-            <div style="display: flex; gap: 1rem;">
+    <div class="card glass" style="max-width: 700px; margin: 0 auto; background: var(--bg-card); border: var(--border-glass); box-shadow: var(--shadow-card);">
+        <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--accent-gold);">Ask the Digital Mufti</h2>
+        <form id="muftiForm">
+            <div style="display: flex; gap: 1rem; align-items: stretch;">
                 <input 
                     type="text" 
-                    name="topic" 
-                    placeholder="e.g., Is Bitcoin Halal?" 
-                    style="flex: 1; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.05); color: var(--text-main);"
+                    id="topicInput"
+                    placeholder="Try: bitcoin, riba, gold" 
+                    style="flex: 1; height: 44px; padding: 0 1rem; border-radius: 0.5rem; border: var(--border-glass); background: var(--bg-void); color: var(--text-primary); font-size: 1rem;"
                     required
                 >
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary" id="synthesizeBtn" style="height: 44px; padding: 0 1.5rem; white-space: nowrap; background: var(--accent-gold); color: white; border: none; border-radius: 0.5rem; cursor: pointer;">
                     Synthesize
                 </button>
             </div>
-            <div id="spinner" class="htmx-indicator" style="text-align: center; margin-top: 1rem; color: var(--text-muted);">
+            <div id="spinner" style="display: none; text-align: center; margin-top: 1rem; color: var(--text-muted);">
                 Consulting the Scholars...
             </div>
         </form>
@@ -38,41 +38,66 @@
     <div id="result" style="margin-top: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;"></div>
 
     <script>
-        document.body.addEventListener('htmx:afterSwap', function(evt) {
-            if (evt.detail.target.id === 'result') {
-                const data = JSON.parse(evt.detail.xhr.responseText);
+        document.getElementById('muftiForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const topic = document.getElementById('topicInput').value;
+            const spinner = document.getElementById('spinner');
+            const result = document.getElementById('result');
+            const btn = document.getElementById('synthesizeBtn');
+            
+            // Show loading
+            spinner.style.display = 'block';
+            btn.disabled = true;
+            btn.textContent = 'Consulting...';
+            result.innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/v1/synthesis', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic: topic })
+                });
+                
+                const data = await response.json();
+                
                 const colorMap = {
                     "Red": "#EF4444",
                     "Yellow": "#EAB308",
                     "Green": "#22C55E"
                 };
                 const color = colorMap[data.status] || "#94A3B8";
+                const emoji = data.status === 'Red' ? '🛑' : data.status === 'Yellow' ? '⚠️' : '✅';
                 
-                evt.detail.target.innerHTML = `
+                result.innerHTML = `
                     <div class="card glass" style="text-align: center; border-top: 4px solid ${color};">
                         <div style="font-size: 4rem; margin-bottom: 1rem; color: ${color};">
-                            ${data.status === 'Red' ? '🛑' : data.status === 'Yellow' ? '⚠️' : '✅'}
+                            ${emoji}
                         </div>
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                            <img src="${data.scholar_avatar}" alt="Scholar Avatar" style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid ${color}; margin-right: 1rem;">
+                            <img src="${data.scholar_avatar}" alt="Scholar" style="width: 64px; height: 64px; border-radius: 50%; border: 2px solid ${color}; margin-right: 1rem;">
                             <div style="text-align: left;">
                                 <div style="font-size: 0.8rem; color: var(--text-muted);">Authority</div>
                                 <div style="font-size: 1.1rem; font-weight: bold; color: var(--text-main);">${data.primary_scholar}</div>
                             </div>
                         </div>
                         <h3 style="font-size: 2rem; margin-bottom: 0.5rem; color: ${color};">Dominant View: ${data.status}</h3>
-                        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Source: Shafi'i School (Consensus)</div>
                         <p style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 1.5rem;">
                             ${data.summary}
                         </p>
-                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem;">
+                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 0.5rem;">
                             <strong>Consensus Score:</strong> ${(data.consensus_score * 100).toFixed(0)}%
                         </div>
-                        <button class="btn" style="background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: var(--text-main);">
-                            View Detailed Citations
-                        </button>
                     </div>
                 `;
+            } catch (error) {
+                result.innerHTML = `<div class="card glass" style="text-align: center; border-top: 4px solid #EF4444;">
+                    <p style="color: #EF4444;">Error: ${error.message}</p>
+                </div>`;
+            } finally {
+                spinner.style.display = 'none';
+                btn.disabled = false;
+                btn.textContent = 'Synthesize';
             }
         });
     </script>

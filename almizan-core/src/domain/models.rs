@@ -33,7 +33,7 @@ pub struct QuranVerse {
 pub struct RootWord {
     pub id: Option<Thing>,
     pub root_ar: String,
-    pub definition_en: String,
+    pub definition_en: Option<String>,
 }
 
 // 1b. CONCEPT (Ontology)
@@ -58,7 +58,7 @@ pub struct DivineName {
 pub struct Hadith {
     pub id: Option<Thing>,
     pub collection: String,
-    pub hadith_number: i32,
+    pub hadith_number: f64,
     pub matn_ar: String,
     // matn_en moved to Translation node
     // grading moved to Edge

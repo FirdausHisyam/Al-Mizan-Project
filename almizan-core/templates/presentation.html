@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Al-Mizan | Presentation</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/theme.js?v=2"></script>
+    <link rel="stylesheet" href="/static/css/style.css?v=2">
     <style>
         /* Presentation-specific styles */
         .pres-container {
@@ -219,6 +220,21 @@
         }
         
         .pres-exit:hover { opacity: 1; }
+
+        /* Light Mode Overrides for Presentation */
+        [data-theme="light"] .pres-container {
+            background: var(--bg-void);
+        }
+        [data-theme="light"] .pres-card,
+        [data-theme="light"] .phase-card,
+        [data-theme="light"] .pres-nav,
+        [data-theme="light"] .pres-exit {
+            background: var(--bg-card);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        [data-theme="light"] .pres-list li {
+            border-bottom-color: rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>

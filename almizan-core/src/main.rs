@@ -63,17 +63,26 @@ async fn main() {
         .route("/auth/signup", post(auth::signup))
         .route("/auth/signin", post(auth::signin))
         .route("/api/v1/evidence/:id", get(api::v1::evidence::get_evidence))
-        // .route(
-        //     "/api/v1/synthesis",
-        //     post(api::v1::synthesis::synthesize_topic),
-        // )
+        .route(
+            "/api/v1/synthesis",
+            post(api::v1::synthesis::synthesize_topic),
+        )
         .route("/api/v1/dashboard", post(api::v1::dashboard::get_dashboard))
-        // .route("/api/v1/graph", get(api::v1::graph::get_graph))
-        // .route(
-        //     "/api/v1/syntax/translate",
-        //     post(api::v1::syntax::translate_query),
-        // )
+        .route("/api/v1/graph", get(api::v1::graph::get_graph))
+        .route("/api/v1/verse/:surah/:ayah", get(api::v1::verse::get_verse))
+        .route("/api/v1/verse/:surah", get(api::v1::verse::get_surah))
+        .route(
+            "/api/v1/hadith/:collection/:number",
+            get(api::v1::hadith::get_hadith),
+        )
+        .route(
+            "/api/v1/hadith/:collection",
+            get(api::v1::hadith::list_collection),
+        )
+        .route("/api/v1/names", get(api::v1::names::get_all_names))
+        .route("/api/v1/names/:id", get(api::v1::names::get_name))
         .route("/citadel", get(api::v1::citadel::dashboard))
+        .route("/playground", get(api::v1::citadel::playground))
         .route(
             "/api/v1/citadel/export",
             get(api::v1::citadel::export_snapshot),
@@ -90,30 +99,30 @@ async fn main() {
         //     "/api/v1/authority/sign",
         //     post(api::v1::authority::sign_ruling),
         // )
-        // .route(
-        //     "/api/v1/enterprise/metrics",
-        //     get(api::v1::enterprise::get_metrics),
-        // )
-        // .route(
-        //     "/api/v1/enterprise/audit",
-        //     post(api::v1::enterprise::audit_document),
-        // )
-        // .route(
-        //     "/api/v1/enterprise/analyze_contract",
-        //     post(api::v1::enterprise::analyze_contract_handler),
-        // )
-        // .route(
-        //     "/api/v1/enterprise/certify",
-        //     post(api::v1::enterprise::certify_contract_handler),
-        // )
-        // .route(
-        //     "/api/v1/identity/resolve/:did",
-        //     get(api::v1::identity::resolve_did),
-        // )
-        // .route(
-        //     "/api/v1/identity/verify",
-        //     post(api::v1::identity::verify_vc),
-        // )
+        .route(
+            "/api/v1/enterprise/metrics",
+            get(api::v1::enterprise::get_metrics),
+        )
+        .route(
+            "/api/v1/enterprise/audit",
+            post(api::v1::enterprise::audit_document),
+        )
+        .route(
+            "/api/v1/enterprise/analyze_contract",
+            post(api::v1::enterprise::analyze_contract_handler),
+        )
+        .route(
+            "/api/v1/enterprise/certify",
+            post(api::v1::enterprise::certify_contract_handler),
+        )
+        .route(
+            "/api/v1/identity/resolve/:did",
+            get(api::v1::identity::resolve_did),
+        )
+        .route(
+            "/api/v1/identity/verify",
+            post(api::v1::identity::verify_vc),
+        )
         // .route("/strategy", get(api::v1::event::get_events))
         .route("/graph", get(graph_handler))
         .route("/landing", get(landing_handler))

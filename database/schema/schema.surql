@@ -79,20 +79,29 @@ DEFINE INDEX hadith_ref ON hadith COLUMNS collection, hadith_number UNIQUE;
 -- ============================================================
 
 -- 4.1 ROOT WORD (Morphology)
-DEFINE TABLE root_word SCHEMAFULL;
+DEFINE TABLE root_word SCHEMAFULL
+    PERMISSIONS
+        FOR select FULL
+        FOR create, update, delete WHERE $auth.role = 'admin';
 DEFINE FIELD root_ar ON root_word TYPE string;
 DEFINE FIELD definition_en ON root_word TYPE option<string>;
 DEFINE INDEX root_ar_idx ON root_word COLUMNS root_ar UNIQUE;
 
 -- 4.2 CONCEPT (Thematic Ontology)
-DEFINE TABLE concept SCHEMAFULL;
+DEFINE TABLE concept SCHEMAFULL
+    PERMISSIONS
+        FOR select FULL
+        FOR create, update, delete WHERE $auth.role = 'admin';
 DEFINE FIELD name_en ON concept TYPE string;
 DEFINE FIELD name_ar ON concept TYPE option<string>;
 DEFINE FIELD description ON concept TYPE option<string>;
 DEFINE INDEX concept_name ON concept COLUMNS name_en UNIQUE;
 
 -- 4.3 DIVINE NAME (Asma ul Husna)
-DEFINE TABLE divine_name SCHEMAFULL;
+DEFINE TABLE divine_name SCHEMAFULL
+    PERMISSIONS
+        FOR select FULL
+        FOR create, update, delete WHERE $auth.role = 'admin';
 DEFINE FIELD transliteration ON divine_name TYPE string;
 DEFINE FIELD arabic ON divine_name TYPE string;
 DEFINE FIELD meaning_en ON divine_name TYPE string;
@@ -103,7 +112,10 @@ DEFINE INDEX divine_name_ar ON divine_name COLUMNS arabic UNIQUE;
 -- Human effort to understand the Divine.
 -- ============================================================
 
-DEFINE TABLE translation SCHEMAFULL;
+DEFINE TABLE translation SCHEMAFULL
+    PERMISSIONS
+        FOR select FULL
+        FOR create, update, delete WHERE $auth.role = 'admin';
 DEFINE FIELD text_en ON translation TYPE string;
 DEFINE FIELD translator ON translation TYPE string;
 DEFINE FIELD language ON translation TYPE string DEFAULT 'en';
@@ -161,44 +173,53 @@ DEFINE FIELD created_at ON fiqh_ruling TYPE datetime DEFAULT time::now();
 
 -- 8.1 TRANSLATION EDGE
 -- Source (Verse/Hadith) -> translated_as -> Translation
-DEFINE TABLE translated_as SCHEMAFULL TYPE RELATION FROM quran_verse|hadith TO translation;
+DEFINE TABLE translated_as SCHEMAFULL TYPE RELATION FROM quran_verse|hadith TO translation
+    PERMISSIONS FOR select FULL;
 
 -- 8.2 MORPHOLOGY EDGE
 -- Verse -> has_root -> RootWord
-DEFINE TABLE has_root SCHEMAFULL TYPE RELATION FROM quran_verse TO root_word;
+DEFINE TABLE has_root SCHEMAFULL TYPE RELATION FROM quran_verse TO root_word
+    PERMISSIONS FOR select FULL;
 
 -- 8.3 THEMATIC EDGE
 -- Verse -> discusses -> Concept
-DEFINE TABLE discusses SCHEMAFULL TYPE RELATION FROM quran_verse TO concept;
+DEFINE TABLE discusses SCHEMAFULL TYPE RELATION FROM quran_verse TO concept
+    PERMISSIONS FOR select FULL;
 
 -- 8.4 DIVINE ATTRIBUTE EDGE
 -- Verse -> invokes -> DivineName
-DEFINE TABLE invokes SCHEMAFULL TYPE RELATION FROM quran_verse TO divine_name;
+DEFINE TABLE invokes SCHEMAFULL TYPE RELATION FROM quran_verse TO divine_name
+    PERMISSIONS FOR select FULL;
 
 -- 8.5 DERIVATION EDGE (Istinbat)
 -- Ruling -> derived_from -> Source (Verse/Hadith)
-DEFINE TABLE derived_from SCHEMAFULL TYPE RELATION FROM fiqh_ruling TO quran_verse|hadith;
+DEFINE TABLE derived_from SCHEMAFULL TYPE RELATION FROM fiqh_ruling TO quran_verse|hadith
+    PERMISSIONS FOR select FULL;
 DEFINE FIELD strength ON derived_from TYPE option<float>;
 DEFINE FIELD method ON derived_from TYPE option<string>;
 
 -- 8.6 GRADING EDGE
 -- Scholar -> graded -> Hadith
-DEFINE TABLE graded SCHEMAFULL TYPE RELATION FROM scholar TO hadith;
+DEFINE TABLE graded SCHEMAFULL TYPE RELATION FROM scholar TO hadith
+    PERMISSIONS FOR select FULL;
 DEFINE FIELD rank ON graded TYPE string ASSERT $value INSIDE ['Sahih', 'Hasan', 'Daif', 'Mawdu'];
 DEFINE FIELD justification ON graded TYPE option<string>;
 
 -- 8.7 NARRATION EDGE (Isnad)
 -- Hadith -> narrated_by -> Scholar
-DEFINE TABLE narrated_by SCHEMAFULL TYPE RELATION FROM hadith TO scholar;
+DEFINE TABLE narrated_by SCHEMAFULL TYPE RELATION FROM hadith TO scholar
+    PERMISSIONS FOR select FULL;
 DEFINE FIELD narration_order ON narrated_by TYPE int;
 
 -- 8.8 TAFSIR EDGE
 -- Hadith -> explains -> Verse
-DEFINE TABLE explains SCHEMAFULL TYPE RELATION FROM hadith TO quran_verse;
+DEFINE TABLE explains SCHEMAFULL TYPE RELATION FROM hadith TO quran_verse
+    PERMISSIONS FOR select FULL;
 
 -- 8.9 SCHOOL AFFILIATION
 -- Scholar -> follows -> School
-DEFINE TABLE follows SCHEMAFULL TYPE RELATION FROM scholar TO school;
+DEFINE TABLE follows SCHEMAFULL TYPE RELATION FROM scholar TO school
+    PERMISSIONS FOR select FULL;
 DEFINE FIELD rank ON follows TYPE int DEFAULT 1;
 
 -- 8.10 ABROGATION (Naskh)

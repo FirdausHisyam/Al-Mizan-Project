@@ -5,35 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Al-Mizan | Digital Citadel{% endblock %}</title>
     
-    <!-- Custom Style (No External Dependencies) -->
-    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Theme Script (must load first to prevent flash) -->
+    <script src="/static/js/theme.js?v=2"></script>
+    
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/css/style.css?v=2">
+    
+    <!-- HTMX for interactive features -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Navigation -->
-        <nav class="sidebar">
-            <div class="logo">
-                <h1>Al-Mizan</h1>
-                <span class="subtitle">The Digital Citadel</span>
-            </div>
-            
-            <ul class="nav-links">
-                <li><a href="/" class="active">Overview</a></li>
-                <li><a href="/graph">Knowledge Graph</a></li>
-                <li><a href="/citadel">Citadel Status</a></li>
-                <li><a href="/presentation">Presentation Mode</a></li>
+    <!-- Horizontal Header Navigation -->
+    <header class="header-nav">
+        <a href="/landing" class="header-nav__brand">
+            <span class="header-nav__brand-icon">⚖️</span>
+            <span>AL-MIZAN</span>
+        </a>
+        
+        <nav>
+            <ul class="header-nav__links">
+                <li><a href="/landing" class="header-nav__link" data-path="/landing">Landing</a></li>
+                <li><a href="/" class="header-nav__link" data-path="/">Certainty Engine</a></li>
+                <li><a href="/presentation" class="header-nav__link" data-path="/presentation">Presentation</a></li>
+                <li><a href="/citadel" class="header-nav__link" data-path="/citadel">Dashboard</a></li>
+                <li><a href="/graph" class="header-nav__link" data-path="/graph">Knowledge Graph</a></li>
+                <li><a href="/governance" class="header-nav__link" data-path="/governance">Governance</a></li>
             </ul>
-
-            <div class="user-profile">
-                <span class="role">System Architect</span>
-                <span class="status-indicator online"></span>
-            </div>
         </nav>
+        
+        <div class="header-nav__actions">
+            <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                🌙
+            </button>
+            <a href="/playground" class="btn-login">Playground</a>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="content-area">
-            {% block content %}{% endblock %}
-        </main>
-    </div>
+    <!-- Main Content -->
+    <main class="content-area" style="height: calc(100vh - 70px); padding: 2rem;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        // Highlight active navigation link
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.header-nav__link').forEach(link => {
+                const linkPath = link.getAttribute('data-path');
+                if (currentPath === linkPath || 
+                    (linkPath !== '/' && currentPath.startsWith(linkPath))) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
