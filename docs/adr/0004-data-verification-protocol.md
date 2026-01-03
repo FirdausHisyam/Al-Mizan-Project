@@ -8,7 +8,7 @@ Deciders: Ammar Qasiem (System Architect), Firdaus (Data Scientist)
 
 ## Context and Problem Statement
 
-The Al-Mizan project deals with "Theological Data" (Quran, Hadith, Fiqh). Unlike typical big data projects where 99% accuracy is acceptable, here **100% accuracy is required** for the core immutable texts. A single misplaced vowel in the Quran changes the meaning, which is unacceptable for a "Citadel of Knowledge."
+The Al-Mizan project deals with "Theological Data" (Quran, Hadith, Fiqh). Unlike typical big data projects where 99% accuracy is acceptable, here **100% accuracy is required** for the core immutable texts. A single misplaced vowel in the Quran changes the meaning, which is unacceptable for a "Fortress of Knowledge."
 
 However, manually verifying millions of edges is impossible. We need a strategy to balance **Scale** vs **Trust**.
 

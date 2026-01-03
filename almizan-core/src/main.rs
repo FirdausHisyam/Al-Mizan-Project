@@ -81,15 +81,15 @@ async fn main() {
         )
         .route("/api/v1/names", get(api::v1::names::get_all_names))
         .route("/api/v1/names/:id", get(api::v1::names::get_name))
-        .route("/citadel", get(api::v1::citadel::dashboard))
-        .route("/playground", get(api::v1::citadel::playground))
+        .route("/network", get(api::v1::network::dashboard))
+        .route("/playground", get(api::v1::network::playground))
         .route(
-            "/api/v1/citadel/export",
-            get(api::v1::citadel::export_snapshot),
+            "/api/v1/network/export",
+            get(api::v1::network::export_snapshot),
         )
         .route(
-            "/api/v1/citadel/ingest",
-            post(api::v1::citadel::ingest_snapshot),
+            "/api/v1/network/ingest",
+            post(api::v1::network::ingest_snapshot),
         )
         // .route(
         //     "/api/v1/authority/propose",

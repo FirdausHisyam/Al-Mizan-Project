@@ -2,7 +2,7 @@
 
 ## Principal Investigators & Developers
 
-The **Islamic Digital Citadel** is developed by the following core team members, operating under a high-assurance research and engineering mandate.
+The **Al-Mizan Project** is developed by the following core team members, operating under a high-assurance research and engineering mandate.
 
 ### 1. Ammar Qasiem Footen bin John Anthony Footen
 

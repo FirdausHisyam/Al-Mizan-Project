@@ -1,4 +1,3 @@
-pub mod citadel;
 pub mod dashboard;
 pub mod enterprise;
 pub mod evidence;
@@ -6,5 +5,6 @@ pub mod graph;
 pub mod hadith;
 pub mod identity;
 pub mod names;
+pub mod network;
 pub mod synthesis;
 pub mod verse;

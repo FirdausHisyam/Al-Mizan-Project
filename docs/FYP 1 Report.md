@@ -52,7 +52,7 @@ The digital custody of Islamic knowledge is currently facing an epistemic crisis
 
 This project, **Al-Mizan**, proposes a solution by engineering a **Tawhidic Knowledge Graph Framework**. Moving beyond traditional Relational Database Management Systems (RDBMS), Al-Mizan utilizes **SurrealDB**, a multi-model graph database, to represent Islamic knowledge as a strongly-typed ontology. The system leverages **Rust** for its backend to ensure memory safety and type correctness, preventing "invalid states" in theological data structures. A dedicated ETL pipeline, written in **Python**, ingests and normalizes raw morphological data from the Quranic Corpus, identifying over 77,000 nodes and their interdependencies.
 
-The core contribution of this work is the **"Fitna Defense" Protocol**: a computational enforcement of the classical *Isnad* system, where every node in the graph must have a cryptographically verifiable lineage to a primary source. This transforms the library from a passive repository into an active **"Digital Citadel,"** capable of serving as the "Ground Truth" for future "Halal" AI agents. The prototype demonstrates sub-millisecond graph traversal, validating the feasibility of a high-performance, type-safe theological engine.
+The core contribution of this work is the **"Fitna Defense" Protocol**: a computational enforcement of the classical *Isnad* system, where every node in the graph must have a cryptographically verifiable lineage to a primary source. This transforms the library from a passive repository into an active **"Digital Fortress,"** capable of serving as the "Ground Truth" for future "Halal" AI agents. The prototype demonstrates sub-millisecond graph traversal, validating the feasibility of a high-performance, type-safe theological engine.
 
 # **TABLE OF CONTENTS** {#table-of-contents}
 
@@ -393,9 +393,9 @@ The initial prototype implements a **"Vertical Slice" architecture**:
     * **Stack:** HTML5 + HTMX (Hypermedia) + Cytoscape.js (Graph Visualization).
     * **Feature:** "Interactive Isnad" — clicking a narrator dynamically loads their teacher/student connections via AJAX.
 
-## **4. Conclusion: Towards a Digital Citadel** {#conclusion}
+## **4. Conclusion: Towards a Digital Fortress** {#conclusion}
 
-Al-Mizan is not merely a database; it is a **Digital Citadel** for the preservation of Islamic thought in the age of Artificial Intelligence. By treating theology as a type-safe graph, we move beyond the era of "Ctrl+F Phony Scholarship" into an era of **Computational Verification**.
+Al-Mizan is not merely a database; it is a **Digital Fortress** for the preservation of Islamic thought in the age of Artificial Intelligence. By treating theology as a type-safe graph, we move beyond the era of "Ctrl+F Phony Scholarship" into an era of **Computational Verification**.
 
 ### **4.1 Future Vision: The "Halal" AI Standard**
 

@@ -3,8 +3,8 @@ use axum::{response::Html, Json};
 use serde::Serialize;
 
 #[derive(Template)]
-#[template(path = "citadel.html")]
-pub struct CitadelDashboardTemplate;
+#[template(path = "network.html")]
+pub struct NetworkDashboardTemplate;
 
 #[derive(Template)]
 #[template(path = "playground.html")]
@@ -24,7 +24,7 @@ pub struct SnapshotMetadata {
 }
 
 pub async fn dashboard() -> impl axum::response::IntoResponse {
-    let template = CitadelDashboardTemplate;
+    let template = NetworkDashboardTemplate;
     Html(template.render().unwrap())
 }
 
